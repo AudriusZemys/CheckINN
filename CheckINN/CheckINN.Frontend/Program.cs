@@ -15,5 +15,11 @@ namespace CheckINN.Frontend
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
+
+
+        public static void InitTesseract()
+        {
+            var tess = new tessnet2.Tesseract();
+        }
     }
 }
