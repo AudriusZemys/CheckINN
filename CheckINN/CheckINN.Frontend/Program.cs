@@ -11,17 +11,9 @@ namespace CheckINN.Frontend
         [STAThread]
         static void Main()
         {
-            InitTesseract();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-        }
-
-
-        public static void InitTesseract()
-        {
-            var tess = new tessnet2.Tesseract();
-            tess.Init(@"tessdata", "lt", true);
         }
     }
 }

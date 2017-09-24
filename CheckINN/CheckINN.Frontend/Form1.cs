@@ -15,6 +15,13 @@ namespace CheckINN.Frontend
         public Form1()
         {
             InitializeComponent();
+            InitTesseract();
+        }
+
+        public void InitTesseract()
+        {
+            var tess = new tessnet2.Tesseract();
+            tess.Init(@"tessdata", "lt", true);
         }
     }
 }
