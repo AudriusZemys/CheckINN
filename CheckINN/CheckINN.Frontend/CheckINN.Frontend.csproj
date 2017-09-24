@@ -82,6 +82,7 @@
     <Content Include="Content\tessdata\eng.unicharset" />
     <Content Include="Content\tessdata\eng.user-words" />
     <Content Include="Content\tessdata\eng.word-dawg" />
+    <None Include="Content\tessdata\lit.traineddata" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
