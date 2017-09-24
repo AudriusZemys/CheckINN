@@ -2,40 +2,42 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using tessnet2;
+using Tesseract;
 
 namespace CheckINN.Frontend
 {
     public partial class Form1 : Form
     {
-        private tessnet2.Tesseract tess = null;
+        private TesseractEngine _tess;
 
         public Form1()
         {
             InitializeComponent();
             InitTesseract();
 
-            if (tess == null)
+            if (_tess == null)
             {
                 throw new Exception("Failed to load tessaract");
             }
 
-            foreach (var word in DoOCR(new Bitmap(@"samples/cekis_lidl.bmp")))
-            {
-                Console.WriteLine(word.ToString());
-            }
+            var result = DoOCR(new Bitmap(@"samples/cekis_lidl.bmp"));
+            Console.Write(result.GetText());
         }
 
         public void InitTesseract()
         {
-
-            tess = new tessnet2.Tesseract();
-            tess.Init(@"tessdata", "lt", true);
+            _tess = new TesseractEngine(@"E:\Uni\CheckINN\CheckINN\CheckINN.Frontend\tessdata\", "lit");
         }
 
-        public List<Word> DoOCR(Bitmap image)
+        public Page DoOCR(Bitmap image)
         {
-            return tess.DoOCR(image, Rectangle.Empty);
+            return _tess.Process(image);
+        }
+
+        public new void Dispose()
+        {
+            base.Dispose();
+            _tess.Dispose();
         }
     }
 }
