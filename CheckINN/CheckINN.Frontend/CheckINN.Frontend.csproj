@@ -76,6 +76,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Content Include="samples\cekis_iki.bmp" />
+    <Content Include="samples\cekis_lidl.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="samples\cekis_maxima.bmp" />
+    <Content Include="samples\cekis_maxima_2.bmp" />
+    <Content Include="samples\cekis_rimi.bmp" />
     <Content Include="tessdata\eng.DangAmbigs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -118,7 +125,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sample Images\cekis_lidl.jpg" />
     <Content Include="x64\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
