@@ -20,8 +20,8 @@ namespace CheckINN.Frontend
                 throw new Exception("Failed to load tessaract");
             }
 
-            var result = DoOCR(new Bitmap(@"samples/cekis_lidl.bmp"));
-            Console.Write(result.GetText());
+            var result = DoOCR(new Bitmap(@"samples/cekis_maxima_cropped.bmp"));
+            MessageBox.Show(Owner, result.GetText());
         }
 
         public void InitTesseract()
