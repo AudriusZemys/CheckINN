@@ -26,7 +26,7 @@ namespace CheckINN.Frontend
 
         public void InitTesseract()
         {
-            _tess = new TesseractEngine(@"E:\Uni\CheckINN\CheckINN\CheckINN.Frontend\tessdata\", "lit");
+            _tess = new TesseractEngine(@"tessdata\", "lit");
         }
 
         public Page DoOCR(Bitmap image)
