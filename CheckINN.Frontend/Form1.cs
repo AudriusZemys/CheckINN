@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using Tesseract;
 
@@ -20,13 +21,16 @@ namespace CheckINN.Frontend
                 throw new Exception("Failed to load tessaract");
             }
 
-            var result = DoOCR(new Bitmap(@"samples/cekis_maxima_cropped.bmp"));
-            MessageBox.Show(Owner, result.GetText());
+            var result = DoOCR(new Bitmap(@"samples/cekis_rimi_cropped.bmp"));
+            var text = result.GetText();
+            File.WriteAllText("output.txt", text);
+            MessageBox.Show(Owner, text);
         }
 
         public void InitTesseract()
         {
             _tess = new TesseractEngine(@"tessdata\", "lit");
+            _tess.DefaultPageSegMode = PageSegMode.SingleBlockVertText;
         }
 
         public Page DoOCR(Bitmap image)
