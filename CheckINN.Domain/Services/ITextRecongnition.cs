@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace CheckINN.Domain
+namespace CheckINN.Domain.Services
 {
-    interface ITextRecongnition
+    public interface ITextRecongnition
     {
         string GetText();
         void Process(Bitmap image);

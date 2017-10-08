@@ -1,8 +1,8 @@
+using System;
 using System.Drawing;
 using Tesseract;
-using static System.String;
 
-namespace CheckINN.Domain
+namespace CheckINN.Domain.Services
 {
     public class TesseractTextRecognition : ITextRecongnition
     {
@@ -11,7 +11,12 @@ namespace CheckINN.Domain
 
         public TesseractTextRecognition()
         {
-            _tess = new TesseractEngine(@"tessdata\", "lit")
+        }
+
+        // @"tessdata\", "lit"
+        public TesseractTextRecognition(string datapath, string language)
+        {
+            _tess = new TesseractEngine(datapath, language)
             {
                 DefaultPageSegMode = PageSegMode.SingleBlockVertText
             };
@@ -24,7 +29,7 @@ namespace CheckINN.Domain
 
         public string GetText()
         {
-            return _processedPage.GetText() ?? Empty;
+            return _processedPage.GetText() ?? String.Empty;
         }
     }
 }
