@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 using Tesseract;
 
 namespace CheckINN.Frontend
@@ -13,15 +14,6 @@ namespace CheckINN.Frontend
         public Popoup_1()
         {
             InitializeComponent();
-            InitTesseract();
-
-            if (_tess == null)
-            {
-                throw new Exception("Failed to load tessaract");
-            }
-
-            var result = DoOCR(new Bitmap(@"samples/cekis_maxima_cropped.bmp"));
-            MessageBox.Show(Owner, result.GetText());
         }
 
         public void InitTesseract()
@@ -38,6 +30,30 @@ namespace CheckINN.Frontend
         {
             base.Dispose();
             _tess.Dispose();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = @"C:\Users\neher\source\repos\CheckINN\CheckINN.Frontend\samples";
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string selectedFileName = openFileDialog1.FileName;
+
+                InitTesseract();
+
+                if (_tess == null)
+                {
+                    throw new Exception("Failed to load tessaract");
+                }
+
+                var result = DoOCR(new Bitmap(selectedFileName));
+                MessageBox.Show(Owner, result.GetText());
+            }
         }
     }
 }
