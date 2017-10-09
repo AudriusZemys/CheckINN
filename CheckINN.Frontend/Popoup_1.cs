@@ -36,7 +36,6 @@ namespace CheckINN.Frontend
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.InitialDirectory = @"C:\Users\neher\source\repos\CheckINN\CheckINN.Frontend\samples";
             openFileDialog1.FilterIndex = 0;
             openFileDialog1.RestoreDirectory = true;
 
