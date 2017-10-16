@@ -13,7 +13,6 @@ namespace CheckINN.Domain.Services
         {
         }
 
-        // @"tessdata\", "lit"
         public TesseractTextRecognition(string datapath, string language)
         {
             _tess = new TesseractEngine(datapath, language)

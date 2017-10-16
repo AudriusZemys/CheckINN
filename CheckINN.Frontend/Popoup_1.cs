@@ -4,16 +4,19 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using Tesseract;
+using CheckINN.Domain.Services;
 
 namespace CheckINN.Frontend
 {
     public partial class Popoup_1 : Form
     {
         private TesseractEngine _tess;
+        private readonly ITextRecongnition _textRecognition;
 
         public Popoup_1()
         {
             InitializeComponent();
+            _textRecognition = new TesseractTextRecognition(@"tessdata\", "lit");
         }
 
         public void InitTesseract()
@@ -21,9 +24,9 @@ namespace CheckINN.Frontend
             _tess = new TesseractEngine(@"tessdata\", "lit");
         }
 
-        public Page DoOCR(Bitmap image)
+        public void DoOCR(Bitmap image)
         {
-            return _tess.Process(image);
+            _textRecognition.Process(image);
         }
 
         public new void Dispose()
@@ -50,8 +53,8 @@ namespace CheckINN.Frontend
                     throw new Exception("Failed to load tessaract");
                 }
 
-                var result = DoOCR(new Bitmap(selectedFileName));
-                MessageBox.Show(Owner, result.GetText());
+                DoOCR(new Bitmap(selectedFileName));
+                MessageBox.Show(Owner, _textRecognition.GetText());
             }
         }
     }
