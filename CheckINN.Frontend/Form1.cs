@@ -3,45 +3,32 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using Tesseract;
 
 namespace CheckINN.Frontend
 {
     public partial class Form1 : Form
     {
-        private TesseractEngine _tess;
-
         public Form1()
         {
             InitializeComponent();
-            InitTesseract();
-
-            if (_tess == null)
-            {
-                throw new Exception("Failed to load tessaract");
-            }
-
-            var result = DoOCR(new Bitmap(@"samples/cekis_rimi_cropped.bmp"));
-            var text = result.GetText();
-            File.WriteAllText("output.txt", text);
-            MessageBox.Show(Owner, text);
         }
 
-        public void InitTesseract()
+        private void button1_Click(object sender, EventArgs e)
         {
-            _tess = new TesseractEngine(@"tessdata\", "lit");
-            _tess.DefaultPageSegMode = PageSegMode.SingleBlockVertText;
+            var form = new Popoup_1();
+            form.Show(this);
         }
 
-        public Page DoOCR(Bitmap image)
+        private void button2_Click(object sender, EventArgs e)
         {
-            return _tess.Process(image);
+            var form = new Popoup_2();
+            form.Show(this);
         }
 
-        public new void Dispose()
+        private void button3_Click(object sender, EventArgs e)
         {
-            base.Dispose();
-            _tess.Dispose();
+            var form = new Popoup_3();
+            form.Show(this);
         }
     }
 }
