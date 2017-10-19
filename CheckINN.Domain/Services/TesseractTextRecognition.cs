@@ -30,5 +30,10 @@ namespace CheckINN.Domain.Services
         {
             return _processedPage.GetText() ?? String.Empty;
         }
+
+        public void Dispose()
+        {
+            _tess.Dispose();
+        }
     }
 }
