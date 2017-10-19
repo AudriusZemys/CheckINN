@@ -21,25 +21,7 @@ namespace CheckINN.Frontend
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.FilterIndex = 0;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string selectedFileName = openFileDialog1.FileName;
-
-                InitTesseract();
-
-                if (_tess == null)
-                {
-                    throw new Exception("Failed to load tesseract");
-                }
-
-                DoOCR(new Bitmap(selectedFileName));
-                MessageBox.Show(Owner, _textRecognition.GetText());
-            }
+            OpenFile();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -68,6 +50,30 @@ namespace CheckINN.Frontend
         {
             base.Dispose();
             _tess.Dispose();
+        }
+
+        public void OpenFile()
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string selectedFileName = openFileDialog1.FileName;
+
+                InitTesseract();
+
+                if (_tess == null)
+                {
+                    throw new Exception("Failed to load tesseract");
+                }
+
+                DoOCR(new Bitmap(selectedFileName));
+                MessageBox.Show(Owner, _textRecognition.GetText());
+                _tess.Dispose();
+            }
         }
     }
 }
