@@ -1,6 +1,6 @@
 ﻿namespace CheckINN.Domain.Entities
 {
-    class Check
+    public class Check
     {
         public Check(CheckHeader checkHeader, CheckBody checkBody, CheckFooter checkFooter)
         {

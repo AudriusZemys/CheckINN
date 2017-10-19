@@ -1,6 +1,6 @@
 ﻿namespace CheckINN.Domain.Entities
 {
-    internal class CheckFooter
+    public class CheckFooter
     {
         public string CashRegister { get; }
 

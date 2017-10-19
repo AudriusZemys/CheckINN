@@ -1,6 +1,6 @@
-using System;
 using System.Drawing;
 using Tesseract;
+using static System.String;
 
 namespace CheckINN.Domain.Services
 {
@@ -28,7 +28,12 @@ namespace CheckINN.Domain.Services
 
         public string GetText()
         {
-            return _processedPage.GetText() ?? String.Empty;
+            return _processedPage.GetText() ?? Empty;
+        }
+
+        public void Dispose()
+        {
+            _tess.Dispose();
         }
     }
 }
