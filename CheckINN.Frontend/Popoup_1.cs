@@ -50,12 +50,13 @@ namespace CheckINN.Frontend
 
                 if (_tess == null)
                 {
-                    throw new Exception("Failed to load tessaract");
+                    throw new Exception("Failed to load tesseract");
                 }
 
                 DoOCR(new Bitmap(selectedFileName));
                 MessageBox.Show(Owner, _textRecognition.GetText());
             }
+            Dispose();
         }
     }
 }
