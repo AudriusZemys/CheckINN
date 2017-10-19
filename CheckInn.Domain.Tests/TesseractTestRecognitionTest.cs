@@ -17,7 +17,7 @@ namespace CheckInn.Domain.Tests
 //        public void GetText_ReturnsEmptyStringIfNoImageProcessed()
 //        {
 //            // arrange
-//            ITextRecongnition ocr = null;
+//            ITextRecognition ocr = null;
 //            try
 //            {
 //                ocr = new TesseractTextRecognition();

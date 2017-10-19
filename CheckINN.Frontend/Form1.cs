@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using CheckINN.Domain.Cache;
+using CheckINN.Domain.Processing;
 using Tesseract;
 using CheckINN.Domain.Services;
+using Unity;
+using Unity.Resolution;
 
 namespace CheckINN.Frontend
 {
     public partial class Form1 : Form
     {
-        private TesseractEngine _tess;
-        private readonly ITextRecongnition _textRecognition;
+        private readonly IUnityContainer _container;
+        private readonly ICheckCache _cache;
+        private readonly ICheckProcessor _processor;
 
-        public Form1()
+        public Form1(IUnityContainer container, ICheckCache cache, ICheckProcessor processor)
         {
+            _container = container;
+            _cache = cache;
+            _processor = processor;
             InitializeComponent();
-            _textRecognition = new TesseractTextRecognition(@"tessdata\", "lit");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,44 +43,32 @@ namespace CheckINN.Frontend
             form.Show(this);
         }
 
-        public void InitTesseract()
-        {
-            _tess = new TesseractEngine(@"tessdata\", "lit");
-        }
-
-        public void DoOCR(Bitmap image)
-        {
-            _textRecognition.Process(image);
-        }
-
-        public new void Dispose()
-        {
-            base.Dispose();
-            _tess.Dispose();
-        }
-
         public void OpenFile()
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
 
-            openFileDialog1.FilterIndex = 0;
-            openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string selectedFileName = openFileDialog1.FileName;
 
-                InitTesseract();
-
-                if (_tess == null)
+                using (var ttr = ResolveTesseract())
                 {
-                    throw new Exception("Failed to load tesseract");
+                    ttr.Process(new Bitmap(selectedFileName));
+                    MessageBox.Show(Owner, ttr.GetText());
                 }
-
-                DoOCR(new Bitmap(selectedFileName));
-                MessageBox.Show(Owner, _textRecognition.GetText());
-                _tess.Dispose();
             }
+        }
+
+        private ITextRecognition ResolveTesseract()
+        {
+            return _container.Resolve<TesseractTextRecognition>(
+                new ParameterOverride("datapath", @"tessdata\"),
+                new ParameterOverride("language", "lit"));
         }
     }
 }
