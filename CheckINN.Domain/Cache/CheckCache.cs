@@ -5,7 +5,7 @@ using CheckINN.Domain.Entities;
 
 namespace CheckINN.Domain.Cache
 {
-    public class CheckCache : ICache<Check>
+    public class CheckCache : ICheckCache
     {
         private readonly List<Check> _cache;
 
