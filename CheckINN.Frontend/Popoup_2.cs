@@ -17,6 +17,10 @@ namespace CheckINN.Frontend
             dataGridView1.Columns[0].Name = "Item";
             dataGridView1.Columns[1].Name = "Cost";
 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowDrop = false;
+
             var produce = cache.SelectMany(check => check.CheckBody.Products)
                 .Select(product => new[] { $"{product.ProductEntry}", $"{product.Cost}" })
                 .ToList();
