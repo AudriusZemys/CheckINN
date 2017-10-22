@@ -1,6 +1,6 @@
 ﻿namespace CheckINN.Domain.Entities
 {
-    internal class CheckHeader
+    public class CheckHeader
     {
         public string ShopIdentifier { get; }
 

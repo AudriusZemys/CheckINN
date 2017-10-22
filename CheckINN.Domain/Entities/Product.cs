@@ -1,6 +1,6 @@
 ﻿namespace CheckINN.Domain.Entities
 {
-    internal class Product
+    public class Product
     {
         public string ProductEntry { get; }
         public decimal Cost { get; }
