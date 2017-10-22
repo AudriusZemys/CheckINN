@@ -15,6 +15,7 @@ namespace CheckINN.Frontend
             IUnityContainer container = new UnityContainer();
             container.RegisterInstance(container);
             container.RegisterType<Form1>();
+            container.RegisterType<Popoup_2>();
             container.RegisterType<ITextRecognition, TesseractTextRecognition>();
             container.RegisterType<ICheckCache, DummyCheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();

@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using CheckINN.Domain.Cache;
 
 namespace CheckINN.Frontend
 {
     public partial class Popoup_2 : Form
     {
-        public Popoup_2()
+        public Popoup_2(ICheckCache cache)
         {
             InitializeComponent();
-        }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
+            dataGridView1.ColumnCount = 2;
+            dataGridView1.Columns[0].Name = "Item";
+            dataGridView1.Columns[1].Name = "Cost";
 
+            var produce = cache.SelectMany(check => check.CheckBody.Products)
+                .Select(product => new[] { $"{product.ProductEntry}", $"{product.Cost}" })
+                .ToList();
+            produce.ForEach(dataArray => dataGridView1.Rows.Add(dataArray));
         }
     }
 }

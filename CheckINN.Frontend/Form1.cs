@@ -33,7 +33,7 @@ namespace CheckINN.Frontend
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var form = new Popoup_2();
+            var form = _container.Resolve<Popoup_2>();
             form.Show(this);
         }
 
