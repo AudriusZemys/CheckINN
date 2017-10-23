@@ -27,12 +27,17 @@ namespace CheckINN.Parser
             this.Content = content;
         }
 
-        public bool findShopName()
+        public bool FindShopName()
         {
             foreach (var line in Content)
             {
-
+                if (r.Match(line).Length > 0)
+                {
+                    ShopName = line;
+                    return true;
+                }
             }
+            return false;
         }
 
         //public bool ShopName(string path, string pattern = "UAB")
