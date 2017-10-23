@@ -4,14 +4,10 @@ using static System.String;
 
 namespace CheckINN.Domain.Services
 {
-    public class TesseractTextRecognition : ITextRecongnition
+    public class TesseractTextRecognition : ITextRecognition
     {
         private readonly TesseractEngine _tess;
         private Page _processedPage;
-
-        public TesseractTextRecognition()
-        {
-        }
 
         public TesseractTextRecognition(string datapath, string language)
         {
