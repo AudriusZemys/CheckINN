@@ -39,16 +39,5 @@ namespace CheckINN.Parser
             }
             return false;
         }
-
-        //public bool ShopName(string path, string pattern = "UAB")
-        //{
-        //    //path = @"C:\Users\Audrius\checkText.txt"
-        //    IEnumerable<string> result = File.ReadLines(path)
-        //        .Where(l => l.Contains(pattern));
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
     }
 }
