@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using CheckINN.Domain.Cache;
+using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using Tesseract;
 using CheckINN.Domain.Services;
@@ -15,14 +16,14 @@ namespace CheckINN.Frontend
     public partial class Form1 : Form
     {
         private readonly IUnityContainer _container;
-        private readonly ICheckCache _cache;
         private readonly ICheckProcessor _processor;
+        private readonly IShopParser _parser;
 
-        public Form1(IUnityContainer container, ICheckCache cache, ICheckProcessor processor)
+        public Form1(IUnityContainer container, ICheckProcessor processor, IShopParser parser)
         {
             _container = container;
-            _cache = cache;
             _processor = processor;
+            _parser = parser;
             InitializeComponent();
         }
 
@@ -50,7 +51,6 @@ namespace CheckINN.Frontend
                 FilterIndex = 0,
                 RestoreDirectory = true
             };
-
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {

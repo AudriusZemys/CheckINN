@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using CheckINN.Parser.Interfaces;
 
-namespace CheckINN.Parser
+namespace CheckINN.Domain.Parser
 {
     public class Parser : IParser
     {

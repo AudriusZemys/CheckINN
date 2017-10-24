@@ -58,6 +58,10 @@
     <Compile Include="Entities\CheckFooter.cs" />
     <Compile Include="Entities\CheckHeader.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Parser\ContentDelivery.cs" />
+    <Compile Include="Parser\IParser.cs" />
+    <Compile Include="Parser\IShopParser.cs" />
+    <Compile Include="Parser\Parser.cs" />
     <Compile Include="Processing\BasicCheckProcessor.cs" />
     <Compile Include="Processing\ICheckProcessor.cs" />
     <Compile Include="Processing\IProcessor.cs" />

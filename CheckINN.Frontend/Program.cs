@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using CheckINN.Domain.Cache;
+using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using Unity;
@@ -19,6 +20,7 @@ namespace CheckINN.Frontend
             container.RegisterType<ITextRecognition, TesseractTextRecognition>();
             container.RegisterType<ICheckCache, DummyCheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
+            container.RegisterType<IShopParser, SimpleShopParser>();
             return container;
         }
 

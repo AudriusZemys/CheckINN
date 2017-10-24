@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace CheckINN.Parser
+namespace CheckINN.Domain.Parser
 {
     class ContentDelivery
     {
