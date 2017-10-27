@@ -62,6 +62,7 @@
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\IShopParser.cs" />
     <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\SimpleShopParser.cs" />
     <Compile Include="Processing\BasicCheckProcessor.cs" />
     <Compile Include="Processing\ICheckProcessor.cs" />
     <Compile Include="Processing\IProcessor.cs" />
