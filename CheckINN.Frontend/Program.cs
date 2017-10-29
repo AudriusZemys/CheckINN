@@ -18,7 +18,7 @@ namespace CheckINN.Frontend
             container.RegisterType<Form1>();
             container.RegisterType<Popoup_2>();
             container.RegisterType<ITextRecognition, TesseractTextRecognition>();
-            container.RegisterType<ICheckCache, DummyCheckCache>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             container.RegisterType<IShopParser, SimpleShopParser>();
             return container;

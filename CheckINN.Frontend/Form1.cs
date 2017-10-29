@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using CheckINN.Domain.Cache;
+using CheckINN.Domain.Entities;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using Tesseract;
@@ -59,7 +61,17 @@ namespace CheckINN.Frontend
                 using (var ttr = ResolveTesseract())
                 {
                     ttr.Process(new Bitmap(selectedFileName));
-                    MessageBox.Show(Owner, ttr.GetText());
+                    var ocrText = ttr.GetText();
+                    var products = _parser.ParseProductList(ocrText);
+                    var check = new Check(
+                        new CheckHeader("maxima"),
+                        new CheckBody(products),
+                        new CheckFooter("321654"));
+                    if (!_processor.TryProcess(check))
+                    {
+                        throw new Exception("Cant process check");
+                    }
+                    MessageBox.Show(Owner, ocrText);
                 }
             }
         }
