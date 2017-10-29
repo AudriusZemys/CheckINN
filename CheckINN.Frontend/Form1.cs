@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using CheckINN.Domain.Cache;
 using CheckINN.Domain.Entities;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
-using Tesseract;
 using CheckINN.Domain.Services;
 using Unity;
 using Unity.Resolution;
+using static CheckINN.Domain.Entities.ShopIdentifier;
 
 namespace CheckINN.Frontend
 {
@@ -42,8 +38,7 @@ namespace CheckINN.Frontend
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var form = new Popoup_3();
-            form.Show(this);
+            MessageBox.Show(this, "Not implemented");
         }
 
         public void OpenFile()
@@ -64,9 +59,9 @@ namespace CheckINN.Frontend
                     var ocrText = ttr.GetText();
                     var products = _parser.ParseProductList(ocrText);
                     var check = new Check(
-                        new CheckHeader("maxima"),
-                        new CheckBody(products),
-                        new CheckFooter("321654"));
+                        checkBody: new CheckBody(products),
+                        checkFooter: new CheckFooter("321654"),
+                        checkHeader: new CheckHeader(Maxima));
                     if (!_processor.TryProcess(check))
                     {
                         throw new Exception("Cant process check");
@@ -76,9 +71,9 @@ namespace CheckINN.Frontend
             }
         }
 
-        private ITextRecognition ResolveTesseract()
+        private TesseractTextRecognition ResolveTesseract()
         {
-            return _container.Resolve<TesseractTextRecognition>(
+            return (TesseractTextRecognition)_container.Resolve<ITextRecognition>(
                 new ParameterOverride("datapath", @"tessdata\"),
                 new ParameterOverride("language", "lit"));
         }
