@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\CheckCacheTest.cs" />
+    <Compile Include="Entities\CheckBodyTest.cs" />
     <Compile Include="Parser\SimpleShopParserTest.cs" />
     <Compile Include="Services\ProductComparerTest.cs" />
     <Compile Include="TesseractTestRecognitionTest.cs" />
