@@ -33,7 +33,8 @@ namespace CheckInn.Domain.Tests.Cache
             var result = cache.First();
             AreEquivalent(data.CheckBody.Products, result.CheckBody.Products);
             AreEqualIgnoringCase(data.CheckFooter.CashRegister, result.CheckFooter.CashRegister);
-            AreEqualIgnoringCase(data.CheckHeader.ShopIdentifier, result.CheckHeader.ShopIdentifier);
+            AreEqualIgnoringCase(data.CheckHeader.ShopIdentifierString, result.CheckHeader.ShopIdentifierString);
+            Assert.AreEqual(data.CheckHeader.ShopIdentifier, result.CheckHeader.ShopIdentifier);
         }
     }
 }

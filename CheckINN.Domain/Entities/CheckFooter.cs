@@ -1,10 +1,10 @@
 ﻿namespace CheckINN.Domain.Entities
 {
-    public class CheckFooter
+    public struct CheckFooter
     {
         public string CashRegister { get; }
 
-        public CheckFooter(string cashRegister)
+        public CheckFooter(string cashRegister = null)
         {
             CashRegister = cashRegister;
         }
