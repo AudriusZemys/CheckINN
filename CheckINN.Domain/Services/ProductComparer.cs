@@ -4,7 +4,7 @@ using static System.String;
 
 namespace CheckINN.Domain.Services
 {
-    class ProductComparer : IComparer<Product>
+    public class ProductComparer : IComparer<Product>
     {
         public int Compare(Product x, Product y)
         {

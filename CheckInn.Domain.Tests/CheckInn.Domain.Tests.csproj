@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Cache\CheckCacheTest.cs" />
     <Compile Include="Parser\SimpleShopParserTest.cs" />
+    <Compile Include="Services\ProductComparerTest.cs" />
     <Compile Include="TesseractTestRecognitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
