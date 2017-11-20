@@ -34,7 +34,6 @@ namespace CheckINN.WebApi.Controllers
                 checkFooter: new CheckFooter("321654"),
                 checkHeader: new CheckHeader(ShopIdentifier.Maxima));
 
-            image.Save("C:\\receipt.bmp");
             if (!_processor.TryProcess(check))
             {
                 return new Status(500, "Cannot process check");
