@@ -39,8 +39,12 @@ namespace CheckINN.WebApi
         private IUnityContainer BuildContainer()
         {
             var container = new UnityContainer();
-            container.RegisterInstance(container);
-            container.RegisterType<ITextRecognition, TesseractTextRecognition>();
+            container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
+            container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
+            container.RegisterType<ITextRecognition, TesseractTextRecognition>(
+                new InjectionConstructor(
+                    new ResolvedParameter<string>("tessdata-location"), 
+                    new ResolvedParameter<string>("tess-language")));
             container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             container.RegisterType<IShopParser, SimpleShopParser>();
@@ -52,6 +56,7 @@ namespace CheckINN.WebApi
         private void RegisterControllers(ref UnityContainer container)
         {
             container.RegisterType<IHttpController, StatusController>("status");
+            container.RegisterType<IHttpController, ReceiptController>("receipt");
         }
 
         public void Start()
@@ -61,6 +66,7 @@ namespace CheckINN.WebApi
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("API Default", "api/{controller}");
             config.Routes.MapHttpRoute("Receipt API", "api/receipt", new {controller = "Receipt"});
+            config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
             config.MaxBufferSize = 50 * 1024 * 1024;
             config.MaxReceivedMessageSize = 50 * 1024 * 1024;
             config.TransferMode = TransferMode.StreamedRequest;
