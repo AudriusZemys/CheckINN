@@ -36,7 +36,7 @@ namespace CheckINN.WebApi
             }
             catch (ResolutionFailedException)
             {
-                _log.Fatal($"Failed to resolve {serviceType.AssemblyQualifiedName}");
+                _log.Debug($"Failed to resolve {serviceType.AssemblyQualifiedName}");
                 return null;
             }
         }
@@ -49,7 +49,7 @@ namespace CheckINN.WebApi
             }
             catch (ResolutionFailedException)
             {
-                _log.Fatal($"Failed to resolve {serviceType.AssemblyQualifiedName}");
+                _log.Debug($"Failed to resolve {serviceType.AssemblyQualifiedName}");
                 return new List<object>();
             }
         }

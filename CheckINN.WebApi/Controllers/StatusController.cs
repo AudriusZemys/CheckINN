@@ -3,11 +3,11 @@ using CheckINN.WebApi.Entities;
 
 namespace CheckINN.WebApi.Controllers
 {
-    class StatusController : ApiController
+    public class StatusController : ApiController
     {
-        public Status GetStatus()
+        [HttpGet] public Status GetStatus()
         {
-            return new Status(0, "OK");
+            return new Status(200, "OK");
         }
     }
 }

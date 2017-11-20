@@ -1,6 +1,12 @@
-﻿namespace CheckINN.WebApi.Entities
+﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Newtonsoft.Json;
+
+namespace CheckINN.WebApi.Entities
 {
-    class Status
+    public class Status
     {
         public Status(int code, string message)
         {
@@ -8,7 +14,9 @@
             Message = message;
         }
 
-        private int Code { get; }
-        private string Message { get; }
+        [JsonProperty("code")]
+        public int Code { get; }
+        [JsonProperty("messsage")]
+        public string Message { get; }
     }
 }

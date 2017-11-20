@@ -1,14 +1,17 @@
-﻿using System;
+﻿using System.Net.Http.Formatting;
+using System.ServiceModel;
 using System.Web.Http;
-using System.Web.Http.Dispatcher;
-using System.Web.Http.Metadata;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dependencies;
 using System.Web.Http.SelfHost;
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using CheckINN.WebApi.Controllers;
+using CheckINN.WebApi.Formatters;
 using log4net;
+using log4net.Config;
 using Topshelf;
 using Unity;
 using Unity.Injection;
@@ -19,22 +22,18 @@ namespace CheckINN.WebApi
     public class ApiHost
     {
         private HttpSelfHostServer _server;
-        private readonly IUnityContainer _container;
+        private readonly IDependencyResolver _resolver;
 
         public ApiHost()
         {
-            _container = BuildContainer();
+            var container = BuildContainer();
+            _resolver = new UnityDependencyResolver(container, ResolveLogger());
+            GlobalConfiguration.Configuration.DependencyResolver = _resolver;
         }
 
         private ILog ResolveLogger()
         {
             return LogManager.GetLogger("CheckINN.WebApi");
-        }
-
-        private void RegisterControllers(ref UnityContainer container)
-        {
-            container.RegisterInstance<IHttpControllerActivator>(new UnityHttpControllerActivator(container));
-            container.RegisterType<StatusController>();
         }
 
         private IUnityContainer BuildContainer()
@@ -50,17 +49,21 @@ namespace CheckINN.WebApi
             return container;
         }
 
+        private void RegisterControllers(ref UnityContainer container)
+        {
+            container.RegisterType<IHttpController, StatusController>("status");
+        }
+
         public void Start()
         {
-            var config = new HttpSelfHostConfiguration("http://localhost:8080")
-            {
-                DependencyResolver = new UnityDependencyResolver(_container, ResolveLogger())
-                
-            };
-
-            config.Routes.MapHttpRoute(
-                "API Default", "api/{controller}",
-                new { id = RouteParameter.Optional });
+            var config = new HttpSelfHostConfiguration("http://localhost:8080");
+            config.DependencyResolver = _resolver;
+            config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
+            config.Routes.MapHttpRoute("API Default", "api/{controller}");
+            config.Routes.MapHttpRoute("Receipt API", "api/receipt", new {controller = "Receipt"});
+            config.MaxBufferSize = 50 * 1024 * 1024;
+            config.MaxReceivedMessageSize = 50 * 1024 * 1024;
+            config.TransferMode = TransferMode.StreamedRequest;
 
             _server = new HttpSelfHostServer(config);
             _server.OpenAsync().Wait();
@@ -75,6 +78,7 @@ namespace CheckINN.WebApi
     {
         static void Main(string[] args)
         {
+            BasicConfigurator.Configure();
             HostFactory.Run(configurator =>
             {
                 configurator.Service<ApiHost>(service =>
