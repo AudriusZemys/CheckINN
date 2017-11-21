@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Windows.Forms;
 using CheckINN.Domain.Entities;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
+using Newtonsoft.Json;
 using Unity;
 using Unity.Resolution;
 using static CheckINN.Domain.Entities.ShopIdentifier;
@@ -53,20 +59,22 @@ namespace CheckINN.Frontend
             {
                 string selectedFileName = openFileDialog1.FileName;
 
-                using (var ttr = ResolveTesseract())
+                using (var client = new HttpClient())
+                using (var stream = new MemoryStream())
                 {
-                    ttr.Process(new Bitmap(selectedFileName));
-                    var ocrText = ttr.GetText();
-                    var products = _parser.ParseProductList(ocrText);
-                    var check = new Check(
-                        checkBody: new CheckBody(products),
-                        checkFooter: new CheckFooter("321654"),
-                        checkHeader: new CheckHeader(Maxima));
-                    if (!_processor.TryProcess(check))
+                    new Bitmap((selectedFileName)).Save(stream, ImageFormat.Bmp);
+                    var request = new HttpRequestMessage
                     {
-                        throw new Exception("Cant process check");
-                    }
-                    MessageBox.Show(Owner, ocrText);
+                        RequestUri = new Uri("http://127.0.0.1:8080/api/receipt/PostReceiptGetText"),
+                        Method = HttpMethod.Post,
+                        Content = new ByteArrayContent(stream.ToArray())
+                    };
+                    request.Content.Headers.Add("Content-Type", "image/bmp");
+
+                    var response = client.SendAsync(request).Result;
+                    var definition = new { ocrText = "", success = "", message = "" };
+                    var result = JsonConvert.DeserializeAnonymousType(response.Content.ReadAsStringAsync().Result, definition);
+                    MessageBox.Show(Owner, result.ocrText);
                 }
             }
         }
