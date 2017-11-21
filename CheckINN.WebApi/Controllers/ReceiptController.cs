@@ -1,9 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Net;
-using System.Net.Http;
+﻿using System.Drawing;
 using System.Web.Http;
-using System.Web.Http.Results;
 using CheckINN.Domain.Entities;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
@@ -18,6 +14,8 @@ namespace CheckINN.WebApi.Controllers
         private readonly ICheckProcessor _processor;
         private readonly IShopParser _parser;
 
+        private string _orcText;
+
         public ReceiptController(ITextRecognition textRecognition, ICheckProcessor processor, IShopParser parser)
         {
             _textRecognition = textRecognition;
@@ -28,7 +26,8 @@ namespace CheckINN.WebApi.Controllers
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
             _textRecognition.Process(image);
-            var products = _parser.ParseProductList(_textRecognition.GetText());
+            _orcText = _textRecognition.GetText();
+            var products = _parser.ParseProductList(_orcText);
             var check = new Check(
                 checkBody: new CheckBody(products),
                 checkFooter: new CheckFooter("321654"),
@@ -39,6 +38,17 @@ namespace CheckINN.WebApi.Controllers
                 return new Status(false, "Cannot process check");
             }
             return new Status(true, "OK");
+        }
+
+        [HttpPost] public object PostReceiptGetText([FromBody] Bitmap image)
+        {
+            var resultStatus = PostReceipt(image);
+            return new
+            {
+                ocrText = _orcText,
+                success = resultStatus.Success,
+                message = resultStatus.Message
+            };
         }
 
         protected override void Dispose(bool disposing)

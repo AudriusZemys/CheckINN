@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dependencies;
 using System.Web.Http.SelfHost;
+using System.Web.Routing;
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
@@ -65,7 +66,7 @@ namespace CheckINN.WebApi
             config.DependencyResolver = _resolver;
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("API Default", "api/{controller}");
-            config.Routes.MapHttpRoute("Receipt API", "api/receipt", new {controller = "Receipt"});
+            config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
             config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
             config.MaxBufferSize = 50 * 1024 * 1024;
             config.MaxReceivedMessageSize = 50 * 1024 * 1024;
