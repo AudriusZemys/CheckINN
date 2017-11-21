@@ -7,7 +7,7 @@ namespace CheckINN.WebApi.Controllers
     {
         [HttpGet] public Status GetStatus()
         {
-            return new Status(200, "OK");
+            return new Status(true, "OK");
         }
     }
 }

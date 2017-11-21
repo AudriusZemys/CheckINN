@@ -8,14 +8,14 @@ namespace CheckINN.WebApi.Entities
 {
     public class Status
     {
-        public Status(int code, string message)
+        public Status(bool success, string message)
         {
-            Code = code;
+            Success = success;
             Message = message;
         }
 
-        [JsonProperty("code")]
-        public int Code { get; }
+        [JsonProperty("success")]
+        public bool Success { get; }
         [JsonProperty("messsage")]
         public string Message { get; }
     }

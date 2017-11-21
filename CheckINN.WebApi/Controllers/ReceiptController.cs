@@ -36,9 +36,9 @@ namespace CheckINN.WebApi.Controllers
 
             if (!_processor.TryProcess(check))
             {
-                return new Status(500, "Cannot process check");
+                return new Status(false, "Cannot process check");
             }
-            return new Status(200, "OK");
+            return new Status(true, "OK");
         }
 
         protected override void Dispose(bool disposing)
