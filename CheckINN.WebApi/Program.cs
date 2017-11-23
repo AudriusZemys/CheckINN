@@ -1,10 +1,8 @@
-﻿using System.Net.Http.Formatting;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dependencies;
 using System.Web.Http.SelfHost;
-using System.Web.Routing;
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
