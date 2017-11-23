@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using CheckINN.Domain.Cache;
-using CheckINN.Domain.Parser;
-using CheckINN.Domain.Processing;
-using CheckINN.Domain.Services;
 using Unity;
 using Unity.Lifetime;
 
@@ -17,10 +13,6 @@ namespace CheckINN.Frontend
             container.RegisterInstance(container);
             container.RegisterType<Form1>();
             container.RegisterType<Popoup_2>();
-            container.RegisterType<ITextRecognition, TesseractTextRecognition>();
-            container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
-            container.RegisterType<IShopParser, SimpleShopParser>();
             return container;
         }
 
