@@ -8,6 +8,9 @@ using CheckINN.WebApi.Entities;
 
 namespace CheckINN.WebApi.Controllers
 {
+    /// <summary>
+    /// Endpoint for receipt images
+    /// </summary>
     public class ReceiptController : ApiController
     {
         private readonly ITextRecognition _textRecognition;
@@ -23,6 +26,11 @@ namespace CheckINN.WebApi.Controllers
             _parser = parser;
         }
 
+        /// <summary>
+        /// Post image for processing
+        /// </summary>
+        /// <param name="image">Bitmap image of the receipt</param>
+        /// <returns>Request outcome status</returns>
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
             _textRecognition.Process(image);
@@ -40,6 +48,11 @@ namespace CheckINN.WebApi.Controllers
             return new Status(true, "OK");
         }
 
+        /// <summary>
+        /// Same as PostReceipt, except it returns text that's in the receipt
+        /// </summary>
+        /// <param name="image">Bitmap image of the receipt</param>
+        /// <returns>Request outcome status and text output from OCR processor</returns>
         [HttpPost] public object PostReceiptGetText([FromBody] Bitmap image)
         {
             var resultStatus = PostReceipt(image);

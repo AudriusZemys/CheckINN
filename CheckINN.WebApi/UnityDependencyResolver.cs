@@ -7,6 +7,9 @@ using Unity.Exceptions;
 
 namespace CheckINN.WebApi
 {
+    /// <summary>
+    /// Uses unity to take place of the original dependency resolver
+    /// </summary>
     public class UnityDependencyResolver : IDependencyResolver
     {
         private readonly IUnityContainer _container;

@@ -20,6 +20,9 @@ using Unity.Lifetime;
 
 namespace CheckINN.WebApi
 {
+    /// <summary>
+    /// Describes and runs the entire service
+    /// </summary>
     public class ApiHost
     {
         private HttpSelfHostServer _server;
@@ -32,6 +35,10 @@ namespace CheckINN.WebApi
             GlobalConfiguration.Configuration.DependencyResolver = _resolver;
         }
 
+        /// <summary>
+        /// Resolved logger instances
+        /// </summary>
+        /// <returns>A logger instance</returns>
         private ILog ResolveLogger()
         {
             return LogManager.GetLogger("CheckINN.WebApi");
@@ -54,12 +61,23 @@ namespace CheckINN.WebApi
             return container;
         }
 
+        /// <summary>
+        /// Register ASP.NET controllers
+        /// </summary>
+        /// <param name="container">Reference to container that is used for everything</param>
         private void RegisterControllers(ref UnityContainer container)
         {
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
         }
 
+        /// <summary>
+        /// Creates HTTP server configuration and runs it
+        /// </summary>
+        /// TODO: Should separate HTTP server from any backing cache services.
+        /// TODO: That would allow stopping HTTP server before the backend,
+        /// TODO: allowing any async processes to finish work gracefully
+        /// TODO: without being fed new data continiously (that's called draining)
         public void Start()
         {
             var config = new HttpSelfHostConfiguration("http://localhost:8080");
@@ -76,13 +94,27 @@ namespace CheckINN.WebApi
             _server.OpenAsync().Wait();
         }
 
+
+        /// <summary>
+        /// Sends a signal to shut the service down
+        /// </summary>
+        /// TODO: Cancellation tokens should be used for this is the future, to cause graceful shutdown
         public void Stop()
         {
             _server.Dispose();
         }
     }
+
+    /// <summary>
+    /// Process starting point
+    /// </summary>
     class Program
     {
+
+        /// <summary>
+        /// Sets up Topshelf as a service managing tool
+        /// </summary>
+        /// <param name="args">it's pretty obvious what this does, and it's unused by the application</param>
         static void Main(string[] args)
         {
             BasicConfigurator.Configure();
