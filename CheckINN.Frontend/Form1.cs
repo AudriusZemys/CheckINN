@@ -2,32 +2,20 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows.Forms;
-using CheckINN.Domain.Entities;
-using CheckINN.Domain.Parser;
-using CheckINN.Domain.Processing;
-using CheckINN.Domain.Services;
 using Newtonsoft.Json;
 using Unity;
-using Unity.Resolution;
-using static CheckINN.Domain.Entities.ShopIdentifier;
 
 namespace CheckINN.Frontend
 {
     public partial class Form1 : Form
     {
         private readonly IUnityContainer _container;
-        private readonly ICheckProcessor _processor;
-        private readonly IShopParser _parser;
 
-        public Form1(IUnityContainer container, ICheckProcessor processor, IShopParser parser)
+        public Form1(IUnityContainer container)
         {
             _container = container;
-            _processor = processor;
-            _parser = parser;
             InitializeComponent();
         }
 
@@ -79,11 +67,5 @@ namespace CheckINN.Frontend
             }
         }
 
-        private TesseractTextRecognition ResolveTesseract()
-        {
-            return (TesseractTextRecognition)_container.Resolve<ITextRecognition>(
-                new ParameterOverride("datapath", @"tessdata\"),
-                new ParameterOverride("language", "lit"));
-        }
     }
 }

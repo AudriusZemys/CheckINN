@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Windows.Forms;
-using CheckINN.Domain.Cache;
-using CheckINN.Domain.Entities;
 using Newtonsoft.Json;
 
 namespace CheckINN.Frontend
 {
-    class ProductDto
-    {
-        public decimal Cost { get; set; }
-        public string ProductEntry { get; set; }
-    }
     public partial class Popoup_2 : Form
     {
-        public Popoup_2(ICheckCache cache)
+        public Popoup_2()
         {
             InitializeComponent();
 
@@ -39,7 +31,7 @@ namespace CheckINN.Frontend
                 };
 
                 var response = client.SendAsync(request).Result;
-                var json = JsonConvert.DeserializeObject<List<ProductDto>>(
+                var json = JsonConvert.DeserializeObject<List<Product>>(
                     response.Content.ReadAsStringAsync().Result,
                     new JsonSerializerSettings
                     {
