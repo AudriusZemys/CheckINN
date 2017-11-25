@@ -33,8 +33,8 @@ namespace CheckINN.WebApi.Controllers
         /// <returns>Request outcome status</returns>
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
-            _textRecognition.Process(image);
-            _orcText = _textRecognition.GetText();
+            _textRecognition.Process(image);  /*HERKUS DOES STUFF*/
+            _orcText = _textRecognition.GetText(); /*Herkus smash*/
             var products = _parser.ParseProductList(_orcText);
             var check = new Check(
                 checkBody: new CheckBody(products),

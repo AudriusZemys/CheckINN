@@ -9,9 +9,9 @@ namespace CheckINN.Domain.Services
         private readonly TesseractEngine _tess;
         private Page _processedPage;
 
-        public TesseractTextRecognition(string datapath, string language)
+        public TesseractTextRecognition(string datapath, string language, EngineMode engineMode)
         {
-            _tess = new TesseractEngine(datapath, language)
+            _tess = new TesseractEngine(datapath, language, engineMode)
             {
                 DefaultPageSegMode = PageSegMode.SingleBlockVertText
             };
