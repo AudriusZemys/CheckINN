@@ -16,7 +16,7 @@ namespace CheckINN.Domain.Parser
         {
             if (!FindShopName())
             {
-                throw new Exception("Shop name not found");
+                throw new Exception("Shop name cannot be identified");
             }
         }
 
@@ -27,15 +27,33 @@ namespace CheckINN.Domain.Parser
 
         public bool FindShopName()
         {
+            bool status = false;
             foreach (var line in Content)
             {
                 if (shopNameRegex.Match(line).Length > 0)
                 {
-                    this.ShopName = line;
-                    return true;
+                    if (line.IndexOf("MAXIMA", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        ShopName = "MAXIMA";
+                    }
+                    if (line.IndexOf("RIMI", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        ShopName = "RIMI";
+                    }
+                    // official name or corporate entity for IKI is PALINK
+                    if (line.IndexOf("PALINK", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        ShopName = "IKI";
+                    }
+                    if (line.IndexOf("LIDL", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        ShopName = "LIDL";
+                    }
+                    status = true;
+                    break;
                 }
             }
-            return false;
+            return status;
         }
     }
 }
