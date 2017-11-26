@@ -28,7 +28,7 @@ namespace CheckINN.Domain.Parser
             {
                 if (shopNameRegex.Match(line).Length > 0)
                 {
-                    ShopName = line;
+                    this.ShopName = line;
                     return true;
                 }
             }
