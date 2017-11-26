@@ -12,9 +12,9 @@ namespace CheckINN.Domain.Parser
         private readonly string _separatorKvitas = "Kvitas";
 
 
-        private readonly Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
-        private readonly Regex priceRegex = new Regex("[0-9]+,[0-9][0-9]");
-        private readonly Regex discountRegex = new Regex("-[0-9]+,[0-9][0-9]");
+        private readonly Regex _shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
+        private readonly Regex _priceRegex = new Regex("[0-9]+,[0-9][0-9]");
+        private readonly Regex _discountRegex = new Regex("-[0-9]+,[0-9][0-9]");
 
         public String ShopName { get; set; }
         public List<Tuple<string, double>> Products { get; set; }
@@ -42,7 +42,7 @@ namespace CheckINN.Domain.Parser
             bool status = false;
             foreach (var line in Content)
             {
-                if (shopNameRegex.Match(line).Length > 0)
+                if (_shopNameRegex.Match(line).Length > 0)
                 {
                     if (line.IndexOf("MAXIMA", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
@@ -99,7 +99,7 @@ namespace CheckINN.Domain.Parser
             bool nextline = false;
             foreach (var line in Content)
             {
-                if (discountRegex.Match(line).Success)
+                if (_discountRegex.Match(line).Success)
                 {
                     continue;
                 }
@@ -114,7 +114,7 @@ namespace CheckINN.Domain.Parser
                 }
                 if (triggerred)
                 {
-                    string match = priceRegex.Match(line).Value;
+                    string match = _priceRegex.Match(line).Value;
                     if (nextline)
                     {
                         price = Convert.ToDouble(match.Replace(",", "."));
@@ -122,7 +122,7 @@ namespace CheckINN.Domain.Parser
                         nextline = false;
                         continue;
                     }
-                    if (match.Length > 0 && !nextline)
+                    if (match.Length > 0)
                     {
                         product = line.Substring(0, line.IndexOf(match)).Trim();
                         price = Convert.ToDouble(match.Replace(",", "."));
