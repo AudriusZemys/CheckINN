@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace CheckINN.Domain.Parser
+namespace CheckINN.Domain.Tests.Parser
 {
     public class ContentDelivery
     {
