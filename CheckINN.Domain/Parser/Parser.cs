@@ -14,7 +14,10 @@ namespace CheckINN.Domain.Parser
 
         public void Parse()
         {
-            throw new NotImplementedException();
+            if (!FindShopName())
+            {
+                throw new Exception("Shop name not found");
+            }
         }
 
         public Parser(IEnumerable<string> content)
