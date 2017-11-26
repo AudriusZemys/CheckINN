@@ -6,11 +6,18 @@ namespace CheckINN.Domain.Parser
 {
     public class Parser : IParser
     {
+        private readonly string separator_dashed = "-----------";
+        private readonly string separator_double_dashed = "-----------";
+        private readonly string separator_kvitas = "Kvitas";
+
+
         private Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
         public String ShopName { get; set; }
         public IEnumerable<Tuple<string, double>> Products { get; set; }
 
         public IEnumerable<string> Content { get; set; }
+
+
 
         public void Parse()
         {

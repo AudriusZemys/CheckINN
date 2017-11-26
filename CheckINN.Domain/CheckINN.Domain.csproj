@@ -78,6 +78,7 @@
     <Compile Include="Services\TesseractTextRecognition.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ParserSampleData\checkTest.txt" />
     <Content Include="samples\cekis_iki.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -199,9 +200,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ParserSampleData\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
