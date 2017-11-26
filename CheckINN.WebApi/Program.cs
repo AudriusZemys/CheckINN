@@ -7,6 +7,7 @@ using CheckINN.Domain.Cache;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
+using CheckINN.Domain.Image;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Formatters;
 using log4net;
@@ -57,6 +58,7 @@ namespace CheckINN.WebApi
             container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             container.RegisterType<IShopParser, SimpleShopParser>();
+            container.RegisterType<ITransform, Transformator>();
             container.RegisterType<ILog>(new InjectionFactory(log => ResolveLogger()));
             RegisterControllers(ref container);
             return container;

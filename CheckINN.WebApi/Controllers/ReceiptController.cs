@@ -5,6 +5,7 @@ using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using CheckINN.WebApi.Entities;
+using CheckINN.Domain.Image;
 
 namespace CheckINN.WebApi.Controllers
 {
@@ -19,7 +20,7 @@ namespace CheckINN.WebApi.Controllers
 
         private string _orcText;
 
-        public ReceiptController(ITextRecognition textRecognition, ICheckProcessor processor, IShopParser parser)
+        public ReceiptController(ITextRecognition textRecognition, ICheckProcessor processor, IShopParser parser, ITransform transformer)
         {
             _textRecognition = textRecognition;
             _processor = processor;
@@ -33,6 +34,7 @@ namespace CheckINN.WebApi.Controllers
         /// <returns>Request outcome status</returns>
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
+            /*Image transformavimas*/
             _textRecognition.Process(image);  /*HERKUS DOES STUFF*/
             _orcText = _textRecognition.GetText(); /*Herkus smash*/
             var products = _parser.ParseProductList(_orcText);

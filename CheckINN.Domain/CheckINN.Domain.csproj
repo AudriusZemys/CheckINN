@@ -64,6 +64,8 @@
     <Compile Include="Entities\CheckHeader.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ShopIdentifier.cs" />
+    <Compile Include="Image\ITransform.cs" />
+    <Compile Include="Image\Transformator.cs" />
     <Compile Include="Parser\ContentDelivery.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\IShopParser.cs" />

@@ -9,11 +9,11 @@ namespace CheckINN.Domain.Services
         private readonly TesseractEngine _tess;
         private Page _processedPage;
 
-        public TesseractTextRecognition(string datapath, string language, EngineMode engineMode)
+        public TesseractTextRecognition(string datapath, string language, EngineMode mode)
         {
-            _tess = new TesseractEngine(datapath, language, engineMode)
+            _tess = new TesseractEngine(datapath, language, mode)
             {
-                DefaultPageSegMode = PageSegMode.SingleBlockVertText
+                DefaultPageSegMode = PageSegMode.Auto
             };
         }
 
