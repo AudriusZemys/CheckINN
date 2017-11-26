@@ -6,16 +6,16 @@ namespace CheckINN.Domain.Parser
 {
     public class Parser : IParser
     {
-        private readonly string separator_dash = "----------";
-        private readonly string separator_double_dash = "==========";
-        private readonly string separator_kvitas = "Kvitas";
+        private readonly string _separatorDash = "----------";
+        private readonly string _separatorDoubleDash = "==========";
+        private readonly string _separatorKvitas = "Kvitas";
 
 
         private Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
         private Regex priceRegex = new Regex("[0-9]+,[0-9][0-9]", RegexOptions.IgnoreCase);
 
         public String ShopName { get; set; }
-        public IEnumerable<Tuple<string, double>> Products { get; set; }
+        public List<Tuple<string, double>> Products { get; set; }
 
         public IEnumerable<string> Content { get; set; }
 
@@ -73,9 +73,27 @@ namespace CheckINN.Domain.Parser
             string endingSeparator = "";
             if (ShopName.Equals("MAXIMA"))
             {
-                beginningSeparator = separator_kvitas;
-                endingSeparator = separator_double_dash;
+                beginningSeparator = _separatorKvitas;
+                endingSeparator = _separatorDoubleDash;
             }
+            if (ShopName.Equals("RIMI"))
+            {
+                beginningSeparator = _separatorDash;
+                endingSeparator = _separatorDash;
+            }
+            if (ShopName.Equals("IKI"))
+            {
+                beginningSeparator = _separatorDash;
+                endingSeparator = _separatorDash;
+            }
+            if (ShopName.Equals("LIDL"))
+            {
+                beginningSeparator = _separatorKvitas;
+                endingSeparator = _separatorDash;
+            }
+            string product = "";
+            double price;
+            bool nextline = false;
             foreach (var line in Content)
             {
                 if (!triggerred && line.Contains(beginningSeparator))
@@ -90,11 +108,24 @@ namespace CheckINN.Domain.Parser
                 if (triggerred)
                 {
                     string match = priceRegex.Match(line).Value;
-                    if (match.Length > 0)
+                    if (nextline)
                     {
-                        string sub = line.Substring(0, line.IndexOf(match)).Trim();
-                        double price = Convert.ToDouble(match);
+                        price = Convert.ToDouble(match);
+                        Products.Add(new Tuple<string, double>(product, price));
+                        nextline = false;
                     }
+                    if (match.Length > 0 && !nextline)
+                    {
+                        product = line.Substring(0, line.IndexOf(match)).Trim();
+                        price = Convert.ToDouble(match);
+                        Products.Add(new Tuple<string, double>(product, price));
+                    }
+                    else
+                    {
+                        product = line.Trim();
+                        nextline = true;
+                    }
+
                 }
             }
 
