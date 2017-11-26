@@ -6,12 +6,14 @@ namespace CheckINN.Domain.Parser
 {
     public class Parser : IParser
     {
-        private readonly string separator_dashed = "-----------";
-        private readonly string separator_double_dashed = "-----------";
+        private readonly string separator_dash = "----------";
+        private readonly string separator_double_dash = "==========";
         private readonly string separator_kvitas = "Kvitas";
 
 
         private Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
+        private Regex priceRegex = new Regex("[0-9]+,[0-9][0-9]", RegexOptions.IgnoreCase);
+
         public String ShopName { get; set; }
         public IEnumerable<Tuple<string, double>> Products { get; set; }
 
@@ -66,6 +68,35 @@ namespace CheckINN.Domain.Parser
         public bool ExtractProductList()
         {
             bool status = false;
+            bool triggerred = false;
+            string beginningSeparator = "";
+            string endingSeparator = "";
+            if (ShopName.Equals("MAXIMA"))
+            {
+                beginningSeparator = separator_kvitas;
+                endingSeparator = separator_double_dash;
+            }
+            foreach (var line in Content)
+            {
+                if (!triggerred && line.Contains(beginningSeparator))
+                {
+                    triggerred = true;
+                    continue;
+                }
+                if (triggerred && line.Contains(endingSeparator))
+                {
+                    break;
+                }
+                if (triggerred)
+                {
+                    string match = priceRegex.Match(line).Value;
+                    if (match.Length > 0)
+                    {
+                        string sub = line.Substring(0, line.IndexOf(match)).Trim();
+                        double price = Convert.ToDouble(match);
+                    }
+                }
+            }
 
             return status;
         }
