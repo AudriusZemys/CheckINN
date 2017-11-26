@@ -55,5 +55,12 @@ namespace CheckINN.Domain.Parser
             }
             return status;
         }
+
+        public bool ExtractProductList()
+        {
+            bool status = false;
+
+            return status;
+        }
     }
 }
