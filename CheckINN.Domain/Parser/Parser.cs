@@ -27,6 +27,7 @@ namespace CheckINN.Domain.Parser
             {
                 throw new Exception("Shop name cannot be identified");
             }
+            ExtractProductList();
         }
 
         public Parser(IEnumerable<string> content)
@@ -67,7 +68,7 @@ namespace CheckINN.Domain.Parser
 
         public bool ExtractProductList()
         {
-            bool status = false;
+            bool status = true;
             bool triggerred = false;
             string beginningSeparator = "";
             string endingSeparator = "";
@@ -113,6 +114,7 @@ namespace CheckINN.Domain.Parser
                         price = Convert.ToDouble(match);
                         Products.Add(new Tuple<string, double>(product, price));
                         nextline = false;
+                        continue;
                     }
                     if (match.Length > 0 && !nextline)
                     {
