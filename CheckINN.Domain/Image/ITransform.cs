@@ -5,6 +5,8 @@ namespace CheckINN.Domain.Image
 {
     public interface ITransform
     {
-        void Transform(Bitmap image);
+        Bitmap ToGreyscale(Bitmap image);
+        Bitmap Brighten(Bitmap image);
+        Bitmap Sharpen(Bitmap image);
     }
 }

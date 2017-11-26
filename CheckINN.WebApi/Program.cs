@@ -49,12 +49,12 @@ namespace CheckINN.WebApi
             var container = new UnityContainer();
             container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
             container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
-            container.RegisterInstance("tess-mode", EngineMode.TesseractOnly, new ContainerControlledLifetimeManager()); /*???????*/
+            container.RegisterInstance("tess-mode", EngineMode.TesseractOnly, new ContainerControlledLifetimeManager());
             container.RegisterType<ITextRecognition, TesseractTextRecognition>(
                 new InjectionConstructor(
                     new ResolvedParameter<string>("tessdata-location"), 
                     new ResolvedParameter<string>("tess-language"),
-                    new ResolvedParameter<EngineMode>("tess-mode")));  /*?????????*/
+                    new ResolvedParameter<EngineMode>("tess-mode")));
             container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             container.RegisterType<IShopParser, SimpleShopParser>();

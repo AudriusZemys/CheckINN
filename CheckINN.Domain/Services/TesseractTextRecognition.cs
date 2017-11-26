@@ -13,7 +13,7 @@ namespace CheckINN.Domain.Services
         {
             _tess = new TesseractEngine(datapath, language, mode)
             {
-                DefaultPageSegMode = PageSegMode.Auto
+                DefaultPageSegMode = PageSegMode./*SingleBlock*/Auto /*Choose one*/
             };
         }
 

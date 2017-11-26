@@ -17,6 +17,7 @@ namespace CheckINN.WebApi.Controllers
         private readonly ITextRecognition _textRecognition;
         private readonly ICheckProcessor _processor;
         private readonly IShopParser _parser;
+        private readonly ITransform _transformer;
 
         private string _orcText;
 
@@ -25,6 +26,7 @@ namespace CheckINN.WebApi.Controllers
             _textRecognition = textRecognition;
             _processor = processor;
             _parser = parser;
+            _transformer = transformer;
         }
 
         /// <summary>
@@ -34,9 +36,12 @@ namespace CheckINN.WebApi.Controllers
         /// <returns>Request outcome status</returns>
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
-            /*Image transformavimas*/
-            _textRecognition.Process(image);  /*HERKUS DOES STUFF*/
-            _orcText = _textRecognition.GetText(); /*Herkus smash*/
+            /*Image transforming*/
+            _transformer.Brighten(image);
+            _transformer.ToGreyscale(image);
+            _transformer.Sharpen(image);
+            _textRecognition.Process(image);
+            _orcText = _textRecognition.GetText();
             var products = _parser.ParseProductList(_orcText);
             var check = new Check(
                 checkBody: new CheckBody(products),
