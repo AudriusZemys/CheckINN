@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace CheckINN.Domain.Parser
@@ -11,14 +12,14 @@ namespace CheckINN.Domain.Parser
         private readonly string _separatorKvitas = "Kvitas";
 
 
-        private Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
-        private Regex priceRegex = new Regex("[0-9]+,[0-9][0-9]", RegexOptions.IgnoreCase);
+        private readonly Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
+        private readonly Regex priceRegex = new Regex("[0-9]+,[0-9][0-9]");
+        private readonly Regex discountRegex = new Regex("-[0-9]+,[0-9][0-9]");
 
         public String ShopName { get; set; }
         public List<Tuple<string, double>> Products { get; set; }
 
         public IEnumerable<string> Content { get; set; }
-
 
 
         public void Parse()
@@ -32,6 +33,7 @@ namespace CheckINN.Domain.Parser
 
         public Parser(IEnumerable<string> content)
         {
+            Products = new List<Tuple<string, double>>();
             this.Content = content;
         }
 
@@ -97,6 +99,10 @@ namespace CheckINN.Domain.Parser
             bool nextline = false;
             foreach (var line in Content)
             {
+                if (discountRegex.Match(line).Success)
+                {
+                    continue;
+                }
                 if (!triggerred && line.Contains(beginningSeparator))
                 {
                     triggerred = true;
@@ -111,7 +117,7 @@ namespace CheckINN.Domain.Parser
                     string match = priceRegex.Match(line).Value;
                     if (nextline)
                     {
-                        price = Convert.ToDouble(match);
+                        price = Convert.ToDouble(match.Replace(",", "."));
                         Products.Add(new Tuple<string, double>(product, price));
                         nextline = false;
                         continue;
@@ -119,7 +125,7 @@ namespace CheckINN.Domain.Parser
                     if (match.Length > 0 && !nextline)
                     {
                         product = line.Substring(0, line.IndexOf(match)).Trim();
-                        price = Convert.ToDouble(match);
+                        price = Convert.ToDouble(match.Replace(",", "."));
                         Products.Add(new Tuple<string, double>(product, price));
                     }
                     else

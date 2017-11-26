@@ -3,7 +3,7 @@ using System.IO;
 
 namespace CheckINN.Domain.Parser
 {
-    class ContentDelivery
+    public class ContentDelivery
     {
         public static IEnumerable<string> GetContent()
         {
