@@ -6,7 +6,7 @@ namespace CheckINN.Domain.Parser
 {
     public class Parser : IParser
     {
-        private Regex r = new Regex("UAB", RegexOptions.IgnoreCase);
+        private Regex shopNameRegex = new Regex("UAB", RegexOptions.IgnoreCase);
         public String ShopName { get; set; }
         public IEnumerable<Tuple<string, double>> Products { get; set; }
 
@@ -26,7 +26,7 @@ namespace CheckINN.Domain.Parser
         {
             foreach (var line in Content)
             {
-                if (r.Match(line).Length > 0)
+                if (shopNameRegex.Match(line).Length > 0)
                 {
                     ShopName = line;
                     return true;
