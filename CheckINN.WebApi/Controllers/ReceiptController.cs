@@ -67,16 +67,13 @@ namespace CheckINN.WebApi.Controllers
         /// <returns>Request outcome status</returns>
         [HttpPost] public Status PostReceipt([FromBody] Bitmap image)
         {
-            /*Image transforming*/
-            _transformer.Brighten(image);
-            _transformer.ToGreyscale(image);
-            _transformer.Sharpen(image);
-            _textRecognition.Process(image);
-            _orcText = _textRecognition.GetText();
-            var products = _parser.ParseProductList(_orcText);
             var textRecognition = _textRecognition.Value;
             var parser = _parser.Value;
             var processor = _processor.Value;
+            var transformer = _transformer.Value;
+            transformer.Brighten(image);
+            transformer.ToGreyscale(image);
+            transformer.Sharpen(image);
             textRecognition.Process(image);
             _orcText = textRecognition.GetText();
             var products = parser.ParseProductList(_orcText);
