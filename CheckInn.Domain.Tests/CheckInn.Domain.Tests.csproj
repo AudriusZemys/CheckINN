@@ -56,6 +56,8 @@
     <Compile Include="Cache\CheckCacheTest.cs" />
     <Compile Include="Cache\BitmapQueueCacheTest.cs" />
     <Compile Include="Entities\CheckBodyTest.cs" />
+    <Compile Include="Parser\ContentDelivery.cs" />
+    <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Parser\SimpleShopParserTest.cs" />
     <Compile Include="Services\ProductComparerTest.cs" />
     <Compile Include="TesseractTestRecognitionTest.cs" />
@@ -71,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Parser\ParserSampleData\checkTest.txt" />
     <EmbeddedResource Include="test_sample.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
