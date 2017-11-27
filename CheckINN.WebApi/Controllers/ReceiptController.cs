@@ -7,6 +7,7 @@ using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using CheckINN.WebApi.Entities;
+using CheckINN.Domain.Image;
 using log4net;
 
 namespace CheckINN.WebApi.Controllers
@@ -19,6 +20,7 @@ namespace CheckINN.WebApi.Controllers
         private readonly Lazy<ITextRecognition> _textRecognition;
         private readonly Lazy<ICheckProcessor> _processor;
         private readonly Lazy<IShopParser> _parser;
+        private readonly Lazy<ITransform> _transformer;
         private readonly ILog _log;
         private readonly IBitmapQueueCache _queue;
 
@@ -26,13 +28,15 @@ namespace CheckINN.WebApi.Controllers
 
         public ReceiptController(Lazy<ITextRecognition> textRecognition, 
             Lazy<ICheckProcessor> processor, 
-            Lazy<IShopParser> parser, 
+            Lazy<IShopParser> parser,
+            Lazy<ITransform> transformer,
             ILog log, 
             IBitmapQueueCache queue)
         {
             _textRecognition = textRecognition;
             _processor = processor;
             _parser = parser;
+            _transformer = transformer;
             _log = log;
             _queue = queue;
         }
@@ -66,6 +70,10 @@ namespace CheckINN.WebApi.Controllers
             var textRecognition = _textRecognition.Value;
             var parser = _parser.Value;
             var processor = _processor.Value;
+            var transformer = _transformer.Value;
+            transformer.Brighten(image);
+            transformer.ToGreyscale(image);
+            transformer.Sharpen(image);
             textRecognition.Process(image);
             _orcText = textRecognition.GetText();
             var products = parser.ParseProductList(_orcText);

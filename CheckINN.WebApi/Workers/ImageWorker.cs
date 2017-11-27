@@ -6,6 +6,7 @@ using CheckINN.Domain.Entities;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
+using CheckINN.Domain.Image;
 using log4net;
 using Unity;
 using static System.Threading.Thread;
@@ -24,6 +25,7 @@ namespace CheckINN.WebApi.Workers
         private readonly ICheckProcessor _processor;
         private readonly IUnityContainer _container;
         private readonly ILog _log;
+        private readonly ITransform _transform;
 
         public delegate void ImageProcessedHandler(object sender, ImageProcessedEventArgs args);
 
@@ -33,7 +35,8 @@ namespace CheckINN.WebApi.Workers
             IBitmapQueueCache queue, 
             IShopParser parser, 
             ICheckProcessor processor, 
-            IUnityContainer container, 
+            IUnityContainer container,
+            ITransform transform,
             ILog log)
         {
             _cancellationToken = cancellationToken;
@@ -42,6 +45,7 @@ namespace CheckINN.WebApi.Workers
             _processor = processor;
             _container = container;
             _log = log;
+            _transform = transform;
             _workerThread = new Thread(ProcessAllImages);
             _workerThread.Start();
         }
@@ -66,6 +70,9 @@ namespace CheckINN.WebApi.Workers
                     continue;
                 }
 
+                _transform.ToGreyscale(image);
+                _transform.Sharpen(image);
+                _transform.Brighten(image);
                 var textRecognition = _container.Resolve<ITextRecognition>();
                 textRecognition.Process(image);
                 var ocrText = textRecognition.GetText();
