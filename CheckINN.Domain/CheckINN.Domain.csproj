@@ -56,8 +56,11 @@
     <Compile Include="Cache\CacheExtensions.cs" />
     <Compile Include="Cache\CheckCache.cs" />
     <Compile Include="Cache\DummyCheckCache.cs" />
+    <Compile Include="Cache\IBitmapQueueCache.cs" />
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Cache\ICheckCache.cs" />
+    <Compile Include="Cache\IQueueCache.cs" />
+    <Compile Include="Cache\BitmapQueueCache.cs" />
     <Compile Include="Entities\Check.cs" />
     <Compile Include="Entities\CheckBody.cs" />
     <Compile Include="Entities\CheckFooter.cs" />

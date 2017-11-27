@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dependencies;
@@ -10,6 +11,7 @@ using CheckINN.Domain.Services;
 using CheckINN.Domain.Image;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Formatters;
+using CheckINN.WebApi.Workers;
 using log4net;
 using log4net.Config;
 using Topshelf;
@@ -26,10 +28,13 @@ namespace CheckINN.WebApi
     public class ApiHost
     {
         private HttpSelfHostServer _server;
+        private ImageWorker _imageWorker;
         private readonly IDependencyResolver _resolver;
-
+        private IUnityContainer _container;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             var container = BuildContainer();
             _resolver = new UnityDependencyResolver(container, ResolveLogger());
             GlobalConfiguration.Configuration.DependencyResolver = _resolver;
@@ -46,43 +51,45 @@ namespace CheckINN.WebApi
 
         private IUnityContainer BuildContainer()
         {
-            var container = new UnityContainer();
-            container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
-            container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
-            container.RegisterInstance("tess-mode", EngineMode.TesseractOnly, new ContainerControlledLifetimeManager());
-            container.RegisterType<ITextRecognition, TesseractTextRecognition>(
+            _container = new UnityContainer();
+            _container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
+            _container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
+            _container.RegisterInstance("tess-mode", EngineMode.TesseractOnly, new ContainerControlledLifetimeManager());
+            _container.RegisterType<ITextRecognition, TesseractTextRecognition>(
                 new InjectionConstructor(
                     new ResolvedParameter<string>("tessdata-location"), 
                     new ResolvedParameter<string>("tess-language"),
                     new ResolvedParameter<EngineMode>("tess-mode")));
-            container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
-            container.RegisterType<IShopParser, SimpleShopParser>();
-            container.RegisterType<ITransform, Transformator>();
-            container.RegisterType<ILog>(new InjectionFactory(log => ResolveLogger()));
-            RegisterControllers(ref container);
-            return container;
+            _container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IBitmapQueueCache, BitmapQueueCache>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
+            _container.RegisterType<IShopParser, SimpleShopParser>();
+            _container.RegisterType<ILog>(new InjectionFactory(log => ResolveLogger()));
+            _container.RegisterInstance(_cancellationTokenSource.Token);
+            _container.RegisterType<ITransform, Transformator>();
+            _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
+            RegisterControllers(ref _container);
+            return _container;
         }
 
         /// <summary>
         /// Register ASP.NET controllers
         /// </summary>
         /// <param name="container">Reference to container that is used for everything</param>
-        private void RegisterControllers(ref UnityContainer container)
+        private void RegisterControllers(ref IUnityContainer container)
         {
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
+            container.RegisterType<IHttpController, CacheController>("cache");
+            container.RegisterType<IHttpController, NotificationController>("notification", new PerResolveLifetimeManager());
         }
 
         /// <summary>
         /// Creates HTTP server configuration and runs it
         /// </summary>
-        /// TODO: Should separate HTTP server from any backing cache services.
-        /// TODO: That would allow stopping HTTP server before the backend,
-        /// TODO: allowing any async processes to finish work gracefully
-        /// TODO: without being fed new data continiously (that's called draining)
         public void Start()
         {
+            _imageWorker = _container.Resolve<ImageWorker>();
             var config = new HttpSelfHostConfiguration("http://localhost:8080");
             config.DependencyResolver = _resolver;
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
@@ -94,17 +101,16 @@ namespace CheckINN.WebApi
             config.TransferMode = TransferMode.StreamedRequest;
 
             _server = new HttpSelfHostServer(config);
-            _server.OpenAsync().Wait();
+            _server.OpenAsync().Wait(_cancellationTokenSource.Token);
         }
 
 
         /// <summary>
         /// Sends a signal to shut the service down
         /// </summary>
-        /// TODO: Cancellation tokens should be used for this is the future, to cause graceful shutdown
         public void Stop()
         {
-            _server.Dispose();
+            _cancellationTokenSource.Cancel();
         }
     }
 
