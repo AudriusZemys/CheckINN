@@ -64,7 +64,6 @@
     <Compile Include="Entities\CheckHeader.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ShopIdentifier.cs" />
-    <Compile Include="Parser\ContentDelivery.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\IShopParser.cs" />
     <Compile Include="Parser\Parser.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Services\TesseractTextRecognition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ParserSampleData\checkTest.txt" />
     <Content Include="samples\cekis_iki.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

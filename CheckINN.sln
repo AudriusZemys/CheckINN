@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckInn.Domain.Tests", "Ch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckINN.WebApi", "CheckINN.WebApi\CheckINN.WebApi.csproj", "{A718B26A-BF9B-47E4-94DE-F3376C9B7A07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDatParser", "TestDatParser\TestDatParser.csproj", "{1BC5A982-C201-4349-9636-5C22C3471E01}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,18 +69,6 @@ Global
 		{A718B26A-BF9B-47E4-94DE-F3376C9B7A07}.Release|x64.Build.0 = Release|Any CPU
 		{A718B26A-BF9B-47E4-94DE-F3376C9B7A07}.Release|x86.ActiveCfg = Release|Any CPU
 		{A718B26A-BF9B-47E4-94DE-F3376C9B7A07}.Release|x86.Build.0 = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|x64.Build.0 = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Debug|x86.Build.0 = Debug|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|x64.ActiveCfg = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|x64.Build.0 = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|x86.ActiveCfg = Release|Any CPU
-		{1BC5A982-C201-4349-9636-5C22C3471E01}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
