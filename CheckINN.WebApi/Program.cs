@@ -18,7 +18,6 @@ using Topshelf;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
-using Tesseract;
 
 namespace CheckINN.WebApi
 {
@@ -64,7 +63,12 @@ namespace CheckINN.WebApi
             _container.RegisterType<IBitmapQueueCache, BitmapQueueCache>(new ContainerControlledLifetimeManager());
             _container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             _container.RegisterType<IShopParser, SimpleShopParser>();
-            _container.RegisterType<ILog>(new InjectionFactory(log => ResolveLogger()));
+            _container.RegisterType<ILog>(
+                new InjectionFactory(
+                    delegate(IUnityContainer container)
+            {
+                return LogManager.GetLogger("CheckINN.WebApi");
+            }));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
