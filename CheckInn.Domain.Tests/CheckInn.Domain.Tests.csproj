@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\CheckCacheTest.cs" />
+    <Compile Include="Cache\BitmapQueueCacheTest.cs" />
     <Compile Include="Entities\CheckBodyTest.cs" />
     <Compile Include="Parser\ContentDelivery.cs" />
     <Compile Include="Parser\ParserTest.cs" />
@@ -72,8 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\ParserSampleData\checkTest.txt" />
+    <EmbeddedResource Include="test_sample.bmp" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

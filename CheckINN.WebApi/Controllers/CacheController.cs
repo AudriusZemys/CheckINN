@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Entities;
-using Unity.Interception.Utilities;
 
 namespace CheckINN.WebApi.Controllers
 {
