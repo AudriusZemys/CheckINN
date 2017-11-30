@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -24,7 +25,7 @@ namespace CheckINN.WebApi
     /// <summary>
     /// Describes and runs the entire service
     /// </summary>
-    public class ApiHost
+    public class ApiHost : IDisposable
     {
         private HttpSelfHostServer _server;
         private ImageWorker _imageWorker;
@@ -51,6 +52,8 @@ namespace CheckINN.WebApi
         private IUnityContainer BuildContainer()
         {
             _container = new UnityContainer();
+            _container.RegisterInstance("http-bind-address", "http://*:8080",
+                new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tess-mode", 0, new ContainerControlledLifetimeManager());
@@ -94,7 +97,7 @@ namespace CheckINN.WebApi
         public void Start()
         {
             _imageWorker = _container.Resolve<ImageWorker>();
-            var config = new HttpSelfHostConfiguration("http://localhost:8080");
+            var config = new HttpSelfHostConfiguration(_container.Resolve<string>("http-bind-address"));
             config.DependencyResolver = _resolver;
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("API Default", "api/{controller}");
@@ -115,6 +118,15 @@ namespace CheckINN.WebApi
         public void Stop()
         {
             _cancellationTokenSource.Cancel();
+        }
+
+        public void Dispose()
+        {
+            _server?.Dispose();
+            _imageWorker?.Dispose();
+            _resolver?.Dispose();
+            _container?.Dispose();
+            _cancellationTokenSource?.Dispose();
         }
     }
 
