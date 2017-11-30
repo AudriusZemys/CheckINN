@@ -9,6 +9,6 @@ namespace CheckINN.WebApi.Workers
             OcrText = ocrText;
         }
 
-        public string OcrText { get; }
+        public string OcrText { get; set; }
     }
 }

@@ -31,6 +31,9 @@ namespace CheckINN.WebApi
         private ImageWorker _imageWorker;
         private readonly IDependencyResolver _resolver;
         private IUnityContainer _container;
+
+        public IUnityContainer Container => _container;
+
         private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {

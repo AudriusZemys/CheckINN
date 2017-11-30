@@ -29,7 +29,9 @@ namespace CheckINN.WebApi.Workers
 
         public delegate void ImageProcessedHandler(object sender, ImageProcessedEventArgs args);
 
-        public event ImageProcessedHandler ImageProcessed;
+        public virtual event ImageProcessedHandler ImageProcessed;
+
+        public ImageWorker() {}
 
         public ImageWorker(CancellationToken cancellationToken, 
             IBitmapQueueCache queue, 
