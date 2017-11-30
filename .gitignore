@@ -243,4 +243,4 @@ ModelManifest.xml
 
 !CheckINN.Domain/x64/*
 !CheckINN.Domain/x86/*
-
+*.zip
