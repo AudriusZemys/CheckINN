@@ -10,4 +10,4 @@ function Zip-Files( $zipfilename, $sourcedir )
         $zipfilename, $compressionLevel, $false)
 }
 
-Zip-Files "CheckINN.WebApi.$version.zip" "CheckINN.WebApi\bin\Release\"
+Zip-Files "C:\projects\checkinn\CheckINN.WebApi.$version.zip" "C:\projects\checkinn\CheckINN.WebApi\bin\Release\"
