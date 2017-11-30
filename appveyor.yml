@@ -1,4 +1,4 @@
-version: 0.1.0.{build}
+version: 0.1.1.{build}
 
 configuration: Release
 
@@ -31,3 +31,11 @@ build:
   project: CheckINN.sln
 
   verbosity: normal
+
+before_test:
+
+- ps: .\package.ps1 -version $env:APPVEYOR_BUILD_VERSION
+
+artifacts:
+
+- path: '*.zip'
