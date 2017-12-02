@@ -1,5 +1,5 @@
 param (
-    [string] $project = $(throw "Must provide a project name `"-project blablabla`"")
+    [string] $project = $(throw "Must provide a project name `"-project blablabla`""),
     [string] $version = $(throw "Must provide a version string `"-version 0.0.0.0`"")
 )
 
