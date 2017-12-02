@@ -1,4 +1,5 @@
 param (
+    [string] $project = $(throw "Must provide a project name `"-project blablabla`"")
     [string] $version = $(throw "Must provide a version string `"-version 0.0.0.0`"")
 )
 
@@ -10,4 +11,4 @@ function Zip-Files( $zipfilename, $sourcedir )
         $zipfilename, $compressionLevel, $false)
 }
 
-Zip-Files "C:\projects\checkinn\CheckINN.WebApi.$version.zip" "C:\projects\checkinn\CheckINN.WebApi\bin\Release\"
+Zip-Files "C:\projects\checkinn\$project.$version.zip" "C:\projects\checkinn\$project\bin\Release\"
