@@ -155,6 +155,10 @@
       <Project>{ED4A3516-4393-4812-A15E-91669923D51B}</Project>
       <Name>CheckINN.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CheckINN.Repository\CheckINN.Repository.csproj">
+      <Project>{D70DA355-B8CC-4D8F-BF1F-9A8A034B1745}</Project>
+      <Name>CheckINN.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

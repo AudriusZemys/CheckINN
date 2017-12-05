@@ -10,6 +10,9 @@ using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using CheckINN.Domain.Image;
+using CheckINN.Repository.Contexts;
+using CheckINN.Repository.Entities;
+using CheckINN.Repository.Repositories;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Formatters;
 using CheckINN.WebApi.Workers;
@@ -71,11 +74,19 @@ namespace CheckINN.WebApi
             _container.RegisterType<IShopParser, SimpleShopParser>();
             _container.RegisterType<ILog>(
                 new InjectionFactory(container => LogManager.GetLogger("CheckINN.WebApi")));
+            _container.RegisterType<Func<ReceiptsContext>>(new InjectionFactory(DbContextFactory));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IRepository<Check>, CheckRepository>();
+            _container.RegisterType<IRepository<ProductListing>, ProductListingRepository>();
             RegisterControllers(ref _container);
             return _container;
+        }
+
+        private object DbContextFactory(IUnityContainer unityContainer)
+        {
+            return new Func<ReceiptsContext>(() => new ReceiptsContext());
         }
 
         /// <summary>

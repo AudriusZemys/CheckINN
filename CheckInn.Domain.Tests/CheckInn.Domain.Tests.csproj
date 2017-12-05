@@ -30,8 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -43,6 +51,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +68,7 @@
     <Compile Include="Parser\ContentDelivery.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Parser\SimpleShopParserTest.cs" />
+    <Compile Include="Processing\BasicCheckProcessorTest.cs" />
     <Compile Include="Services\ProductComparerTest.cs" />
     <Compile Include="TesseractTestRecognitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +80,10 @@
     <ProjectReference Include="..\CheckINN.Domain\CheckINN.Domain.csproj">
       <Project>{ED4A3516-4393-4812-A15E-91669923D51B}</Project>
       <Name>CheckINN.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CheckINN.Repository\CheckINN.Repository.csproj">
+      <Project>{D70DA355-B8CC-4D8F-BF1F-9A8A034B1745}</Project>
+      <Name>CheckINN.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
