@@ -1,4 +1,6 @@
-version: 0.1.1.{build}
+
+
+version: 0.1.0.{build}
 
 configuration: Release
 
@@ -34,8 +36,16 @@ build:
 
 before_test:
 
-- ps: .\package.ps1 -version $env:APPVEYOR_BUILD_VERSION
+- ps: >-
+
+    .\package.ps1 -project CheckINN.WebApi -version $env:APPVEYOR_BUILD_VERSION
+
+
+
+    .\package.ps1 -project CheckINN.Frontend -version $env:APPVEYOR_BUILD_VERSION
 
 artifacts:
 
 - path: '*.zip'
+
+
