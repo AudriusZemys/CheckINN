@@ -1,0 +1,25 @@
+version: 0.2.0.{build}
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+cache:
+  - packages -> **\packages.config
+nuget:
+  account_feed: true
+  project_feed: true
+before_build:
+- cmd: nuget restore
+build:
+  project: CheckINN.sln
+  verbosity: normal
+before_test:
+- ps: >-
+    .\package.ps1 -project CheckINN.WebApi -version $env:APPVEYOR_BUILD_VERSION
+#    .\package.ps1 -project CheckINN.Frontend -version $env:APPVEYOR_BUILD_VERSION
+artifacts:
+- path: '*.zip'
