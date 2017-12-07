@@ -54,12 +54,12 @@ namespace CheckINN.Repository.Tests.Contexts
             return Activator.CreateInstance<T>();
         }
 
-        public TDerivedEntity Create<TDerivedEntity>() where TDerivedEntity : class, T
+        public new TDerivedEntity Create<TDerivedEntity>() where TDerivedEntity : class, T
         {
             return Activator.CreateInstance<TDerivedEntity>();
         }
 
-        public List<T> Local => _data;
+        public new List<T> Local => _data;
 
         public override IEnumerable<T> AddRange(IEnumerable<T> entities)
         {

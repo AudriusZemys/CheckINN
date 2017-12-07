@@ -34,6 +34,7 @@ namespace CheckINN.WebApi
         private ImageWorker _imageWorker;
         private readonly IDependencyResolver _resolver;
         private IUnityContainer _container;
+        private readonly ILog _log;
 
         public IUnityContainer Container => _container;
 
@@ -44,6 +45,7 @@ namespace CheckINN.WebApi
             var container = BuildContainer();
             _resolver = new UnityDependencyResolver(container, ResolveLogger());
             GlobalConfiguration.Configuration.DependencyResolver = _resolver;
+            _log = ResolveLogger();
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace CheckINN.WebApi
         private IUnityContainer BuildContainer()
         {
             _container = new UnityContainer();
-            _container.RegisterInstance("http-bind-address", "http://*:8080",
+            _container.RegisterInstance("http-bind-address", "http://0.0.0.0:8080",
                 new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
@@ -106,8 +108,11 @@ namespace CheckINN.WebApi
         /// </summary>
         public void Start()
         {
+            _log.Info("Service starting...");
             _imageWorker = _container.Resolve<ImageWorker>();
-            var config = new HttpSelfHostConfiguration(_container.Resolve<string>("http-bind-address"))
+            var bindAddress = _container.Resolve<string>("http-bind-address");
+            _log.Info($"Server bind on {bindAddress}");
+            var config = new HttpSelfHostConfiguration(bindAddress)
             {
                 DependencyResolver = _resolver,
                 MaxBufferSize = 50 * 1024 * 1024,
@@ -129,6 +134,7 @@ namespace CheckINN.WebApi
         /// </summary>
         public void Stop()
         {
+            _log.Info("Issueing stop signal...");
             _cancellationTokenSource.Cancel();
         }
 
