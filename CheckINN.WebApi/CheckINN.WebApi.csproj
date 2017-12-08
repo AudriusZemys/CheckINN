@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CacheController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Entities\Status.cs" />

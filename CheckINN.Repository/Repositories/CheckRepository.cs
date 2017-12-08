@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CheckINN.Repository.Contexts;
 using CheckINN.Repository.Entities;
 
@@ -25,9 +26,17 @@ namespace CheckINN.Repository.Repositories
             }
         }
 
-        public void SaveMany(IEnumerable<Check> items)
+        public virtual void SaveMany(IEnumerable<Check> items)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual IEnumerable<Check> GetAll()
+        {
+            using (var context = _contextFactory.Invoke())
+            {
+                return context.Checks.Select(check => check).ToList();
+            }
         }
     }
 }

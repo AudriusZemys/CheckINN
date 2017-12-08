@@ -57,6 +57,9 @@ namespace CheckINN.WebApi
             return LogManager.GetLogger("CheckINN.WebApi");
         }
 
+        /// <summary>
+        /// Regitser all required classes
+        /// </summary>
         private IUnityContainer BuildContainer()
         {
             _container = new UnityContainer();
@@ -86,6 +89,13 @@ namespace CheckINN.WebApi
             return _container;
         }
 
+        /// <summary>
+        /// Using a factory method instead of the real thing,
+        /// because we expect longer lifetime for repository objects,
+        /// and rapidly creating/closing contexts allows ADO.NET
+        /// to optimize the connection pool better.
+        /// </summary>
+        /// <returns>Delegate to context creation</returns>
         private object DbContextFactory(IUnityContainer unityContainer)
         {
             return new Func<ReceiptsContext>(() => new ReceiptsContext());
@@ -100,6 +110,7 @@ namespace CheckINN.WebApi
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
             container.RegisterType<IHttpController, CacheController>("cache");
+            container.RegisterType<IHttpController, ProductsController>("product");
             container.RegisterType<IHttpController, NotificationController>("notification", new PerResolveLifetimeManager());
         }
 
@@ -120,9 +131,11 @@ namespace CheckINN.WebApi
                 TransferMode = TransferMode.StreamedRequest
             };
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
-            config.Routes.MapHttpRoute("API Default", "api/{controller}");
             config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
             config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
+            config.Routes.MapHttpRoute("Push notifications", "api/notification", new { controller = "Notification" });
+            config.Routes.MapHttpRoute("Status endpoint", "api/status", new { controller = "Status" });
+            config.Routes.MapHttpRoute("Product listing endpoint", "api/products/{action}", new { controller = "Products", action = "GetByCheckId" });
 
             _server = new HttpSelfHostServer(config);
             _server.OpenAsync().Wait(_cancellationTokenSource.Token);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CheckINN.Repository.Contexts;
 using CheckINN.Repository.Entities;
 
@@ -34,6 +35,14 @@ namespace CheckINN.Repository.Repositories
                     context.ProductListings.Add(item);
                 }
                 context.SaveChanges();
+            }
+        }
+
+        public IEnumerable<ProductListing> GetByCheckId(int checkId)
+        {
+            using (var context = _contextFactory.Invoke())
+            {
+                return context.ProductListings.Where(listing => listing.CheckId == checkId);
             }
         }
     }
