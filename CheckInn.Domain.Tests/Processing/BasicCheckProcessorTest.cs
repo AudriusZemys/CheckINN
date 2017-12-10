@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CheckINN.Domain.Entities;
 using CheckINN.Domain.Processing;
 using CheckINN.Repository.Repositories;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
@@ -25,7 +26,8 @@ namespace CheckInn.Domain.Tests.Processing
         {
             // arrange
             var productRepoMock = new Mock<ProductListingRepository>();
-            var processor = new BasicCheckProcessor(productRepoMock.Object);
+            var logMock = new Mock<ILog>();
+            var processor = new BasicCheckProcessor(productRepoMock.Object, logMock.Object);
             var check = _fixture.Create<Check>();
 
             // act
