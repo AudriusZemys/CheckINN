@@ -32,6 +32,8 @@ namespace CheckInn.Domain.Tests.Cache
             var result = cache.Dequeue();
 
             // assert
+            // This is a bit wrong, because we don't know if it's ever reformed properly
+            // Also might break with underneath changes
             AreSame(expect, result);
         }
     }

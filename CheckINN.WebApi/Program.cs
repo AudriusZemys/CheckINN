@@ -31,6 +31,9 @@ namespace CheckINN.WebApi
         private ImageWorker _imageWorker;
         private readonly IDependencyResolver _resolver;
         private IUnityContainer _container;
+
+        public IUnityContainer Container => _container;
+
         private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {
@@ -67,11 +70,7 @@ namespace CheckINN.WebApi
             _container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             _container.RegisterType<IShopParser, SimpleShopParser>();
             _container.RegisterType<ILog>(
-                new InjectionFactory(
-                    delegate(IUnityContainer container)
-            {
-                return LogManager.GetLogger("CheckINN.WebApi");
-            }));
+                new InjectionFactory(container => LogManager.GetLogger("CheckINN.WebApi")));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
@@ -97,15 +96,17 @@ namespace CheckINN.WebApi
         public void Start()
         {
             _imageWorker = _container.Resolve<ImageWorker>();
-            var config = new HttpSelfHostConfiguration(_container.Resolve<string>("http-bind-address"));
-            config.DependencyResolver = _resolver;
+            var config = new HttpSelfHostConfiguration(_container.Resolve<string>("http-bind-address"))
+            {
+                DependencyResolver = _resolver,
+                MaxBufferSize = 50 * 1024 * 1024,
+                MaxReceivedMessageSize = 50 * 1024 * 1024,
+                TransferMode = TransferMode.StreamedRequest
+            };
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("API Default", "api/{controller}");
             config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
             config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
-            config.MaxBufferSize = 50 * 1024 * 1024;
-            config.MaxReceivedMessageSize = 50 * 1024 * 1024;
-            config.TransferMode = TransferMode.StreamedRequest;
 
             _server = new HttpSelfHostServer(config);
             _server.OpenAsync().Wait(_cancellationTokenSource.Token);
