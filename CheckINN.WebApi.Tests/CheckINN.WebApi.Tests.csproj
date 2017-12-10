@@ -82,7 +82,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\CacheControllerTest.cs" />
     <Compile Include="Controllers\NotificationControllerTest.cs" />
     <Compile Include="Controllers\ReceiptControllerTest.cs" />
     <Compile Include="Controllers\StatusControllerTest.cs" />

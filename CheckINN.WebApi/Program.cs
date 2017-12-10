@@ -73,7 +73,6 @@ namespace CheckINN.WebApi
                     new ResolvedParameter<string>("tessdata-location"), 
                     new ResolvedParameter<string>("tess-language"),
                     new ResolvedParameter<int>("tess-mode")));
-            _container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IBitmapQueueCache, BitmapQueueCache>(new ContainerControlledLifetimeManager());
             _container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             _container.RegisterType<IShopParser, SimpleShopParser>();

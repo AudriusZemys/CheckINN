@@ -19,7 +19,6 @@ namespace CheckINN.WebApi.Tests
         /// Saves some headaches
         /// </summary>
         [TestCase(typeof(IBitmapQueueCache))]
-        [TestCase(typeof(ICheckCache))]
         [TestCase(typeof(ICheckProcessor))]
         [TestCase(typeof(IShopParser))]
         [TestCase(typeof(ILog))]
