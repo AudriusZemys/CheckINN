@@ -10,6 +10,9 @@ using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
 using CheckINN.Domain.Services;
 using CheckINN.Domain.Image;
+using CheckINN.Repository.Contexts;
+using CheckINN.Repository.Entities;
+using CheckINN.Repository.Repositories;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Formatters;
 using CheckINN.WebApi.Workers;
@@ -31,16 +34,19 @@ namespace CheckINN.WebApi
         private ImageWorker _imageWorker;
         private readonly IDependencyResolver _resolver;
         private IUnityContainer _container;
+        private readonly ILog _log;
 
         public IUnityContainer Container => _container;
 
         private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {
+            XmlConfigurator.Configure();
             _cancellationTokenSource = new CancellationTokenSource();
             var container = BuildContainer();
             _resolver = new UnityDependencyResolver(container, ResolveLogger());
             GlobalConfiguration.Configuration.DependencyResolver = _resolver;
+            _log = ResolveLogger();
         }
 
         /// <summary>
@@ -52,10 +58,13 @@ namespace CheckINN.WebApi
             return LogManager.GetLogger("CheckINN.WebApi");
         }
 
+        /// <summary>
+        /// Regitser all required classes
+        /// </summary>
         private IUnityContainer BuildContainer()
         {
             _container = new UnityContainer();
-            _container.RegisterInstance("http-bind-address", "http://*:8080",
+            _container.RegisterInstance("http-bind-address", "http://0.0.0.0:8080",
                 new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tessdata-location", @"tessdata\", new ContainerControlledLifetimeManager());
             _container.RegisterInstance("tess-language", "lit", new ContainerControlledLifetimeManager());
@@ -65,17 +74,31 @@ namespace CheckINN.WebApi
                     new ResolvedParameter<string>("tessdata-location"), 
                     new ResolvedParameter<string>("tess-language"),
                     new ResolvedParameter<int>("tess-mode")));
-            _container.RegisterType<ICheckCache, CheckCache>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IBitmapQueueCache, BitmapQueueCache>(new ContainerControlledLifetimeManager());
             _container.RegisterType<ICheckProcessor, BasicCheckProcessor>();
             _container.RegisterType<IShopParser, SimpleShopParser>();
             _container.RegisterType<ILog>(
                 new InjectionFactory(container => LogManager.GetLogger("CheckINN.WebApi")));
+            _container.RegisterType<Func<ReceiptsContext>>(new InjectionFactory(DbContextFactory));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IRepository<Check>, CheckRepository>();
+            _container.RegisterType<IRepository<ProductListing>, ProductListingRepository>();
             RegisterControllers(ref _container);
             return _container;
+        }
+
+        /// <summary>
+        /// Using a factory method instead of the real thing,
+        /// because we expect longer lifetime for repository objects,
+        /// and rapidly creating/closing contexts allows ADO.NET
+        /// to optimize the connection pool better.
+        /// </summary>
+        /// <returns>Delegate to context creation</returns>
+        private object DbContextFactory(IUnityContainer unityContainer)
+        {
+            return new Func<ReceiptsContext>(() => new ReceiptsContext());
         }
 
         /// <summary>
@@ -86,7 +109,7 @@ namespace CheckINN.WebApi
         {
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
-            container.RegisterType<IHttpController, CacheController>("cache");
+            container.RegisterType<IHttpController, ProductsController>("product");
             container.RegisterType<IHttpController, NotificationController>("notification", new PerResolveLifetimeManager());
         }
 
@@ -95,8 +118,11 @@ namespace CheckINN.WebApi
         /// </summary>
         public void Start()
         {
+            _log.Info("Service starting...");
             _imageWorker = _container.Resolve<ImageWorker>();
-            var config = new HttpSelfHostConfiguration(_container.Resolve<string>("http-bind-address"))
+            var bindAddress = _container.Resolve<string>("http-bind-address");
+            _log.Info($"Server bind on {bindAddress}");
+            var config = new HttpSelfHostConfiguration(bindAddress)
             {
                 DependencyResolver = _resolver,
                 MaxBufferSize = 50 * 1024 * 1024,
@@ -104,9 +130,10 @@ namespace CheckINN.WebApi
                 TransferMode = TransferMode.StreamedRequest
             };
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
-            config.Routes.MapHttpRoute("API Default", "api/{controller}");
             config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
-            config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
+            config.Routes.MapHttpRoute("Push notifications", "api/notification", new { controller = "Notification" });
+            config.Routes.MapHttpRoute("Status endpoint", "api/status", new { controller = "Status" });
+            config.Routes.MapHttpRoute("Product listing endpoint", "api/products/{action}", new { controller = "Products", action = "GetByCheckId" });
 
             _server = new HttpSelfHostServer(config);
             _server.OpenAsync().Wait(_cancellationTokenSource.Token);
@@ -118,6 +145,7 @@ namespace CheckINN.WebApi
         /// </summary>
         public void Stop()
         {
+            _log.Info("Issueing stop signal...");
             _cancellationTokenSource.Cancel();
         }
 
@@ -143,7 +171,6 @@ namespace CheckINN.WebApi
         /// <param name="args">it's pretty obvious what this does, and it's unused by the application</param>
         static void Main(string[] args)
         {
-            BasicConfigurator.Configure();
             HostFactory.Run(configurator =>
             {
                 configurator.Service<ApiHost>(service =>

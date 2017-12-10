@@ -1,29 +1,44 @@
 ﻿using System;
-using CheckINN.Domain.Cache;
-using CheckINN.Domain.Entities;
+using System.Linq;
+using CheckINN.Repository.Entities;
+using CheckINN.Repository.Repositories;
+using log4net;
+using Check = CheckINN.Domain.Entities.Check;
 
 namespace CheckINN.Domain.Processing
 {
     public class BasicCheckProcessor : ICheckProcessor
     {
-        private readonly ICheckCache _cache;
+        private readonly IRepository<ProductListing> _listingRepo;
+        private readonly ILog _log;
 
-        public BasicCheckProcessor(ICheckCache cache)
+        public BasicCheckProcessor(IRepository<ProductListing> listingRepo, ILog log)
         {
-            _cache = cache;
+            _listingRepo = listingRepo;
+            _log = log;
         }
 
         public bool TryProcess(Check item)
         {
-            bool result = true;
+            var result = true;
             try
             {
-                _cache.Put(item);
+                var rCheck = new Repository.Entities.Check
+                {
+                    Date = DateTime.Now
+                };
+                var rProducts = item.CheckBody.Products.Select(product => new ProductListing
+                {
+                    Name = product.ProductEntry,
+                    Price = product.Cost,
+                    Check = rCheck
+                });
+                _listingRepo.SaveMany(rProducts);
             }
             catch (Exception e)
             {
                 result = false;
-                Console.Write(e.Message);
+                _log.Error(e);
             }
             return result;
         }
