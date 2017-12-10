@@ -170,7 +170,7 @@ namespace CheckINN.WebApi
         /// <param name="args">it's pretty obvious what this does, and it's unused by the application</param>
         static void Main(string[] args)
         {
-            BasicConfigurator.Configure();
+            XmlConfigurator.Configure();
             HostFactory.Run(configurator =>
             {
                 configurator.Service<ApiHost>(service =>
