@@ -79,7 +79,7 @@ namespace CheckINN.WebApi
             _container.RegisterType<IShopParser, SimpleShopParser>();
             _container.RegisterType<ILog>(
                 new InjectionFactory(container => LogManager.GetLogger("CheckINN.WebApi")));
-            _container.RegisterType<Func<ReceiptsContext>>(new InjectionFactory(DbContextFactory));
+            _container.RegisterType<Func<CheckINNContext>>(new InjectionFactory(DbContextFactory));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
@@ -98,7 +98,7 @@ namespace CheckINN.WebApi
         /// <returns>Delegate to context creation</returns>
         private object DbContextFactory(IUnityContainer unityContainer)
         {
-            return new Func<ReceiptsContext>(() => new ReceiptsContext());
+            return new Func<CheckINNContext>(() => new CheckINNContext());
         }
 
         /// <summary>

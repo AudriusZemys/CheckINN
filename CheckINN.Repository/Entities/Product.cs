@@ -1,23 +1,22 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CheckINN.Repository.Entities
 {
-    public class Check
+    public class Product
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CheckId { get; set; }
-        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public string Name { get; set; }
         public int ShopId { get; set; }
-        public int UserId { get; set; }
-        public bool IsValid { get; set; }
 
-        [ForeignKey("ShopId")]
+        [ForeignKey("CheckId")]
         public Shop Shop { get; set; }
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-
     }
 }

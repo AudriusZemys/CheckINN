@@ -25,7 +25,7 @@ namespace CheckINN.Repository.Tests.Repositories
         public void Save_Saves()
         {
             // arrange
-            var mockContext = new Mock<ReceiptsContext>();
+            var mockContext = new Mock<CheckINNContext>();
             var repo = new CheckRepository(() =>
             {
                 var set = new FakeDbSet<Check>();

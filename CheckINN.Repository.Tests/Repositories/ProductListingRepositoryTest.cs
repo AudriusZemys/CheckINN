@@ -26,7 +26,7 @@ namespace CheckINN.Repository.Tests.Repositories
         public void Save_Saves()
         {
             // arrange
-            var mockContext = new Mock<ReceiptsContext>();
+            var mockContext = new Mock<CheckINNContext>();
             var repo = new ProductListingRepository(() =>
             {
                 var set = new FakeDbSet<ProductListing>();
@@ -50,7 +50,7 @@ namespace CheckINN.Repository.Tests.Repositories
         public void SaveMany_SavesMany()
         {
             // arrange
-            var mockContext = new Mock<ReceiptsContext>();
+            var mockContext = new Mock<CheckINNContext>();
             var repo = new ProductListingRepository(() =>
             {
                 var set = new FakeDbSet<ProductListing>();
