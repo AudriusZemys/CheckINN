@@ -42,7 +42,7 @@ namespace CheckINN.Repository.Repositories
         {
             using (var context = _contextFactory.Invoke())
             {
-                return context.ProductListings.Where(listing => listing.CheckId == checkId);
+                return context.ProductListings.Where(listing => listing.CheckId == checkId).ToList();
             }
         }
     }

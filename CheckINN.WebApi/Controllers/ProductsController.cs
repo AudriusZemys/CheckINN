@@ -28,7 +28,7 @@ namespace CheckINN.WebApi.Controllers
         /// <returns>All products in the database</returns>
         [HttpGet] public IEnumerable<Product> GetAll()
         {
-            var allCheckIds = _checkRepository.GetAll().Select(check => check.CheckId).ToList();
+            var allCheckIds = _checkRepository.GetAll().Select(check => check.CheckId);
             var products = allCheckIds.SelectMany(id => _productRepository.GetByCheckId(id));
             return products.Select(listing => new Product(listing.Name, listing.Price));
         }
