@@ -2,6 +2,7 @@
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Parser;
 using CheckINN.Domain.Processing;
+using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Workers;
 using log4net;
 using NUnit.Framework;
@@ -18,11 +19,11 @@ namespace CheckINN.WebApi.Tests
         /// Saves some headaches
         /// </summary>
         [TestCase(typeof(IBitmapQueueCache))]
-        [TestCase(typeof(ICheckCache))]
         [TestCase(typeof(ICheckProcessor))]
         [TestCase(typeof(IShopParser))]
         [TestCase(typeof(ILog))]
         [TestCase(typeof(ImageWorker))]
+        [TestCase(typeof(ProductsController))]
         public void UnityContainer_ResolvesAllClasses(Type type)
         {
             // arrange
