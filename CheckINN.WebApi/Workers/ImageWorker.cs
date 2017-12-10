@@ -72,9 +72,7 @@ namespace CheckINN.WebApi.Workers
                     continue;
                 }
 
-                _transform.ToGreyscale(image);
-                _transform.Sharpen(image);
-                _transform.Brighten(image);
+                _transform.Blur(image);
                 var textRecognition = _container.Resolve<ITextRecognition>();
                 textRecognition.Process(image);
                 var ocrText = textRecognition.GetText();
