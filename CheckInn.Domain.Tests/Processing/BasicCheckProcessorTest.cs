@@ -24,16 +24,14 @@ namespace CheckInn.Domain.Tests.Processing
         public void TryProcess_VerifyRepositoryInvoked()
         {
             // arrange
-            var checkRepoMock = new Mock<CheckRepository>();
             var productRepoMock = new Mock<ProductListingRepository>();
-            var processor = new BasicCheckProcessor(checkRepoMock.Object, productRepoMock.Object);
+            var processor = new BasicCheckProcessor(productRepoMock.Object);
             var check = _fixture.Create<Check>();
 
             // act
             processor.TryProcess(check);
 
             // assert
-            checkRepoMock.Verify(repository => repository.Save(It.IsAny<CheckINN.Repository.Entities.Check>()));
             productRepoMock.Verify(repository => repository.SaveMany(It.IsAny<IEnumerable<CheckINN.Repository.Entities.ProductListing>>()));
         }
     }

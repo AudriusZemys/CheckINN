@@ -41,6 +41,7 @@ namespace CheckINN.WebApi
         private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {
+            XmlConfigurator.Configure();
             _cancellationTokenSource = new CancellationTokenSource();
             var container = BuildContainer();
             _resolver = new UnityDependencyResolver(container, ResolveLogger());
@@ -170,7 +171,6 @@ namespace CheckINN.WebApi
         /// <param name="args">it's pretty obvious what this does, and it's unused by the application</param>
         static void Main(string[] args)
         {
-            XmlConfigurator.Configure();
             HostFactory.Run(configurator =>
             {
                 configurator.Service<ApiHost>(service =>

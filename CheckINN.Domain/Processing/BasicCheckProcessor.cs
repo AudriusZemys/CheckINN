@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Linq;
-using CheckINN.Domain.Cache;
-using CheckINN.Repository.Contexts;
 using CheckINN.Repository.Entities;
 using CheckINN.Repository.Repositories;
+using log4net;
 using Check = CheckINN.Domain.Entities.Check;
 
 namespace CheckINN.Domain.Processing
 {
     public class BasicCheckProcessor : ICheckProcessor
     {
-        private readonly IRepository<Repository.Entities.Check> _checkRepo;
         private readonly IRepository<ProductListing> _listingRepo;
+        private readonly ILog _log;
 
-        public BasicCheckProcessor(IRepository<Repository.Entities.Check> checkRepo,
-            IRepository<ProductListing> listingRepo)
+        public BasicCheckProcessor(IRepository<ProductListing> listingRepo, ILog log)
         {
-            _checkRepo = checkRepo;
             _listingRepo = listingRepo;
+            _log = log;
         }
 
         public bool TryProcess(Check item)
         {
-            bool result = true;
+            var result = true;
             try
             {
                 var rCheck = new Repository.Entities.Check
@@ -35,13 +33,12 @@ namespace CheckINN.Domain.Processing
                     Price = product.Cost,
                     Check = rCheck
                 });
-                _checkRepo.Save(rCheck);
                 _listingRepo.SaveMany(rProducts);
             }
             catch (Exception e)
             {
                 result = false;
-                Console.Write(e.Message);
+                _log.Error(e);
             }
             return result;
         }
