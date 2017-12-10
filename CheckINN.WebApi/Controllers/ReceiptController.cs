@@ -71,9 +71,7 @@ namespace CheckINN.WebApi.Controllers
             var parser = _parser.Value;
             var processor = _processor.Value;
             var transformer = _transformer.Value;
-            transformer.Brighten(image);
-            transformer.ToGreyscale(image);
-            transformer.Sharpen(image);
+            transformer.Blur(image);
             textRecognition.Process(image);
             _orcText = textRecognition.GetText();
             var products = parser.ParseProductList(_orcText);
