@@ -109,7 +109,6 @@ namespace CheckINN.WebApi
         {
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
-            container.RegisterType<IHttpController, CacheController>("cache");
             container.RegisterType<IHttpController, ProductsController>("product");
             container.RegisterType<IHttpController, NotificationController>("notification", new PerResolveLifetimeManager());
         }
@@ -132,7 +131,6 @@ namespace CheckINN.WebApi
             };
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
-            config.Routes.MapHttpRoute("Cache API", "api/cache", new { controller = "Cache" });
             config.Routes.MapHttpRoute("Push notifications", "api/notification", new { controller = "Notification" });
             config.Routes.MapHttpRoute("Status endpoint", "api/status", new { controller = "Status" });
             config.Routes.MapHttpRoute("Product listing endpoint", "api/products/{action}", new { controller = "Products", action = "GetByCheckId" });
