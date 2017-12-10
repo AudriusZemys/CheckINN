@@ -5,6 +5,7 @@ namespace CheckINN.Repository.Contexts
 {
     public class ReceiptsContext : DbContext
     {
+        public ReceiptsContext() {}
         public ReceiptsContext(string databaseName = "CheckINN.Datastore") : base(databaseName)
         {
         }
