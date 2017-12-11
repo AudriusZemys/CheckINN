@@ -10,6 +10,7 @@ namespace CheckINN.Repository.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string Username { get; set; }
-        public SHA256 PasswordHash { get; set; }
+        public byte[] Salt { get; set; }
+        public byte[] PasswordHash { get; set; }
     }
 }
