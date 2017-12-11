@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using CheckINN.Repository.Entities;
+using CheckINN.Repository.Migrations;
 
 namespace CheckINN.Repository.Contexts
 {

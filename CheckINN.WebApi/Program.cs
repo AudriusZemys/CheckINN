@@ -85,6 +85,8 @@ namespace CheckINN.WebApi
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IRepository<Check>, CheckRepository>();
             _container.RegisterType<IRepository<ProductListing>, ProductListingRepository>();
+            _container.RegisterType<IRepository<Check>, CheckRepository>();
+            _container.RegisterType<IRepository<User>, UserRepository>();
             RegisterControllers(ref _container);
             return _container;
         }
@@ -110,6 +112,7 @@ namespace CheckINN.WebApi
             container.RegisterType<IHttpController, StatusController>("status");
             container.RegisterType<IHttpController, ReceiptController>("receipt");
             container.RegisterType<IHttpController, ProductsController>("product");
+            container.RegisterType<IHttpController, UserContoller>("user");
             container.RegisterType<IHttpController, NotificationController>("notification", new PerResolveLifetimeManager());
         }
 
@@ -134,6 +137,7 @@ namespace CheckINN.WebApi
             config.Routes.MapHttpRoute("Push notifications", "api/notification", new { controller = "Notification" });
             config.Routes.MapHttpRoute("Status endpoint", "api/status", new { controller = "Status" });
             config.Routes.MapHttpRoute("Product listing endpoint", "api/products/{action}", new { controller = "Products", action = "GetByCheckId" });
+            config.Routes.MapHttpRoute("User and auth management", "api/user/{action}", new { controller = "User" });
 
             _server = new HttpSelfHostServer(config);
             _server.OpenAsync().Wait(_cancellationTokenSource.Token);

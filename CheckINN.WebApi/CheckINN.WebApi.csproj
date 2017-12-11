@@ -149,7 +149,9 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Controllers\UserContoller.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Formatters\SingleBitmapFormatter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

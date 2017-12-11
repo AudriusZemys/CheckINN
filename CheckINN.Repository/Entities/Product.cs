@@ -16,7 +16,7 @@ namespace CheckINN.Repository.Entities
         public string Name { get; set; }
         public int ShopId { get; set; }
 
-        [ForeignKey("CheckId")]
+        [ForeignKey("ShopId")]
         public Shop Shop { get; set; }
     }
 }

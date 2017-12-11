@@ -5,7 +5,6 @@ using CheckINN.Repository.Repositories;
 using CheckINN.Repository.Tests.Contexts;
 using Moq;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
 using static NUnit.Framework.Assert;
 using static NUnit.Framework.StringAssert;
 
