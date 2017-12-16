@@ -7,6 +7,6 @@ public class DatabaseAccess {
     private SQLiteDatabase database;
 
     public DatabaseAccess() {
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase("localData",, null);
+        //SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase("localData",, null);
     }
 }
