@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main">
 
     <ExpandableListView
+        android:id="@+id/expandableListView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="#f00"

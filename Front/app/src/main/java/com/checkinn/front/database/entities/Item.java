@@ -1,7 +1,9 @@
 package com.checkinn.front.database.entities;
 
+import android.arch.persistence.room.Entity;
 
-public class Item {
+@Entity
+class Item {
     public String itemName;
     public String shopName;
     public double price;
