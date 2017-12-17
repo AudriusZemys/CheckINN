@@ -8,6 +8,8 @@ import android.arch.persistence.room.PrimaryKey;
 public class Item {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    @ColumnInfo(name = "user_name")
+    public String userName;
     @ColumnInfo(name = "item_name")
     public String itemName;
     @ColumnInfo(name = "shop_name")
