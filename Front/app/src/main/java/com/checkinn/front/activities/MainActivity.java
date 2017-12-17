@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         item.shopName = "shop";
         item.itemName = "amazing_item";
         item.price = 25.15;
-        db.userDao().insertItems(item);
-        Item[] items = db.userDao().loadAllItems();
+        db.itemDao().insertItems(item);
+        Item[] items = db.itemDao().loadAllItems();
 
         //login button for camera
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

@@ -8,5 +8,5 @@ import com.checkinn.front.database.entities.Item;
 
 @Database(entities = {Item.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract ItemDao userDao();
+    public abstract ItemDao itemDao();
 }
