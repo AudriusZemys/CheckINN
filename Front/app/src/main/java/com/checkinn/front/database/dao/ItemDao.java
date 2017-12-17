@@ -22,4 +22,7 @@ public interface ItemDao {
 
     @Query("SELECT * FROM item")
     public Item[] loadAllItems();
+
+    @Query("delete from item")
+    public void deleteAllItems();
 }

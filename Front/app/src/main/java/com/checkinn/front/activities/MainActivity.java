@@ -47,11 +47,13 @@ public class MainActivity extends AppCompatActivity {
         populateExpandableListView();
 
 
+        dropTableAndInsertTestData();
+
         //testing database access
-        Item item = new Item();
-        item.shopName = "shop";
-        item.itemName = "amazing_item";
-        item.price = 25.15;
+//        Item item = new Item();
+//        item.shopName = "shop";
+//        item.itemName = "amazing_item";
+//        item.price = 25.15;
 //        db.itemDao().insertItems(item);
 //        Item[] items = db.itemDao().loadAllItems();
 
@@ -87,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
         Item[] items = db.itemDao().loadAllItems();
 
+        if (items.length == 0) {
+            listDataHeader.add("No data");
+        }
+
         for (int i = 0; i < items.length; i++) {
             listDataHeader.add(items[i].itemName);
             List<String> data = new ArrayList<String>();
@@ -94,40 +100,51 @@ public class MainActivity extends AppCompatActivity {
             data.add("Lowest price: " + items[i].price + " €");
             listDataChildren.put(listDataHeader.get(i), data);
         }
+    }
 
-//            // Adding child data
-//            listDataHeader.add("Top 250");
-//            listDataHeader.add("Now Showing");
-//            listDataHeader.add("Coming Soon..");
-//
-//            // Adding child data
-//            List<String> top250 = new ArrayList<String>();
-//            top250.add("The Shawshank Redemption");
-//            top250.add("The Godfather");
-//            top250.add("The Godfather: Part II");
-//            top250.add("Pulp Fiction");
-//            top250.add("The Good, the Bad and the Ugly");
-//            top250.add("The Dark Knight");
-//            top250.add("12 Angry Men");
-//
-//            List<String> nowShowing = new ArrayList<String>();
-//            nowShowing.add("The Conjuring");
-//            nowShowing.add("Despicable Me 2");
-//            nowShowing.add("Turbo");
-//            nowShowing.add("Grown Ups 2");
-//            nowShowing.add("Red 2");
-//            nowShowing.add("The Wolverine");
-//
-//            List<String> comingSoon = new ArrayList<String>();
-//            comingSoon.add("2 Guns");
-//            comingSoon.add("The Smurfs 2");
-//            comingSoon.add("The Spectacular Now");
-//            comingSoon.add("The Canyons");
-//            comingSoon.add("Europa Report");
-//
-//            listDataChildren.put(listDataHeader.get(0), top250); // Header, Child data
-//            listDataChildren.put(listDataHeader.get(1), nowShowing);
-//            listDataChildren.put(listDataHeader.get(2), comingSoon);
+    //possibly remove from final product
+    private void dropTableAndInsertTestData() {
+
+        db.itemDao().deleteAllItems();
+
+        Item item;
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Citrinos";
+        item.price = 1.39;
+        db.itemDao().insertItems(item);
+
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Malta kava JACOBS KRONUNG";
+        item.price = 4.99;
+        db.itemDao().insertItems(item);
+
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Kepintos ir sūdytos pistacijos";
+        item.price = 14.74;
+        db.itemDao().insertItems(item);
+
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Brendis J. P. CHENET RESERVE IMPERIALE";
+        item.price = 16.99;
+        db.itemDao().insertItems(item);
+
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Kepintos saulėgrąžos žM";
+        item.price = 1.48;
+        db.itemDao().insertItems(item);
+
+        item = new Item();
+        item.shopName = "Maxima";
+        item.itemName = "Tortas JUODOJI ROŽĖ";
+        item.price = 6.97;
+        db.itemDao().insertItems(item);
+
+
     }
 
 }
