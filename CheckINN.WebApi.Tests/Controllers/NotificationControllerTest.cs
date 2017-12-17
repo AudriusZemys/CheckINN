@@ -1,8 +1,10 @@
 ﻿using System.Threading;
+using CheckINN.Domain.Entities;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Workers;
 using Moq;
 using NUnit.Framework;
+using Ploeh.AutoFixture;
 using static System.Threading.Thread;
 using static NUnit.Framework.Assert;
 
@@ -11,11 +13,19 @@ namespace CheckINN.WebApi.Tests.Controllers
     [TestFixture]
     public class NotificationControllerTest
     {
+        private Fixture _fixture;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _fixture = new Fixture();
+        }
+
         [Test]
         public void PushNotification_WaitsForEventBeforeReplying()
         {
             // arrange
-            var args = new ImageProcessedEventArgs("Some text");
+            var args = _fixture.Create<ImageProcessedEventArgs>();
             var mockImageWorker = new Mock<ImageWorker>();
             var controller = new NotificationController(mockImageWorker.Object);
             object result = null;
@@ -38,7 +48,7 @@ namespace CheckINN.WebApi.Tests.Controllers
             var property = type.GetProperty("ocrText");
             var text = (string)property?.GetValue(result, null);
             NotNull(text);
-            StringAssert.AreEqualIgnoringCase("Some text", text);
+            StringAssert.AreEqualIgnoringCase(args.OcrText, text);
 
         }
     }

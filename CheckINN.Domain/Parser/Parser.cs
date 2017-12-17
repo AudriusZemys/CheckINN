@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text.RegularExpressions;
+using log4net;
 
 namespace CheckINN.Domain.Parser
 {
@@ -17,7 +17,8 @@ namespace CheckINN.Domain.Parser
         private readonly Regex _discountRegex = new Regex("-[0-9]+,[0-9][0-9]");
 
         public String ShopName { get; set; }
-        public List<Tuple<string, double>> Products { get; set; }
+        public string ShopAddress { get; set; }
+        public List<Tuple<string, decimal>> Products { get; set; }
 
         public IEnumerable<string> Content { get; set; }
 
@@ -33,7 +34,7 @@ namespace CheckINN.Domain.Parser
 
         public Parser(IEnumerable<string> content)
         {
-            Products = new List<Tuple<string, double>>();
+            Products = new List<Tuple<string, decimal>>();
             this.Content = content;
         }
 
@@ -42,6 +43,12 @@ namespace CheckINN.Domain.Parser
             bool status = false;
             foreach (var line in Content)
             {
+                if (status)
+                {
+                    if (string.IsNullOrEmpty(line)) continue;
+                    ShopAddress = line;
+                    break;
+                }
                 if (_shopNameRegex.Match(line).Length > 0)
                 {
                     if (line.IndexOf("MAXIMA", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -62,7 +69,6 @@ namespace CheckINN.Domain.Parser
                         ShopName = "LIDL";
                     }
                     status = true;
-                    break;
                 }
             }
             return status;
@@ -95,7 +101,7 @@ namespace CheckINN.Domain.Parser
                 endingSeparator = _separatorDash;
             }
             string product = "";
-            double price;
+            decimal price;
             bool nextline = false;
             foreach (var line in Content)
             {
@@ -117,16 +123,16 @@ namespace CheckINN.Domain.Parser
                     string match = _priceRegex.Match(line).Value;
                     if (nextline)
                     {
-                        price = Convert.ToDouble(match.Replace(",", "."));
-                        Products.Add(new Tuple<string, double>(product, price));
+                        price = Convert.ToDecimal(match.Replace(",", "."));
+                        Products.Add(new Tuple<string, decimal>(product, price));
                         nextline = false;
                         continue;
                     }
                     if (match.Length > 0)
                     {
                         product = line.Substring(0, line.IndexOf(match)).Trim();
-                        price = Convert.ToDouble(match.Replace(",", "."));
-                        Products.Add(new Tuple<string, double>(product, price));
+                        price = Convert.ToDecimal(match.Replace(",", "."));
+                        Products.Add(new Tuple<string, decimal>(product, price));
                     }
                     else
                     {

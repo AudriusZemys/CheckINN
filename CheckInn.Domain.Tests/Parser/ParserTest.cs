@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using CheckINN.Domain.Parser;
 using CheckINN.Domain.Tests.Parser;
 using NUnit.Framework;
 using static NUnit.Framework.CollectionAssert;

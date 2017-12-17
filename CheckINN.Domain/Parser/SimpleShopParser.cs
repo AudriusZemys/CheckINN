@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using CheckINN.Domain.Entities;
+using static System.String;
 
 namespace CheckINN.Domain.Parser
 {
     public class SimpleShopParser : IShopParser
     {
+        private readonly Random _random;
+
+        public SimpleShopParser()
+        {
+            _random = new Random();
+        }
+
         public IEnumerable<Product> ParseProductList(string text)
         {
             var regex = new Regex(@"(.+)\n", RegexOptions.Multiline);
@@ -18,7 +26,12 @@ namespace CheckINN.Domain.Parser
 
             foreach (Group matchGroup in matches)
             {
-                yield return new Product(matchGroup.Value.TrimEnd('\n'), 0);
+                var line = matchGroup.Value.TrimEnd('\n');
+                if (!IsNullOrEmpty(line))
+                {
+                    var rValue = new decimal(_random.NextDouble() * 50);
+                    yield return new Product(line, rValue);
+                }
             }
         }
     }
