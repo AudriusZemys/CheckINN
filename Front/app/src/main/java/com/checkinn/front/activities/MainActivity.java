@@ -3,6 +3,7 @@ package com.checkinn.front.activities;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private AppDatabase db;
     private ExpandableListAdapter listAdapter;
@@ -49,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
         dropTableAndInsertTestData();
 
 
-        //login button for camera
+        //button for camera
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                dispatchTakePictureIntent();
             }
         });
     }
@@ -135,8 +139,13 @@ public class MainActivity extends AppCompatActivity {
         item.itemName = "Tortas JUODOJI ROŽĖ";
         item.price = 6.97;
         db.itemDao().insertItems(item);
+    }
 
-
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
 }
