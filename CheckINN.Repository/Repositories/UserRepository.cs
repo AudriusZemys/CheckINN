@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,13 +9,23 @@ using CheckINN.Repository.Entities;
 
 namespace CheckINN.Repository.Repositories
 {
+    /// <summary>
+    /// This is only here to stop this repository and it's tests from failing.
+    /// It has other use whatsoever.
+    /// Swap this with an actual context with the actual entity to put it back into working code.
+    /// </summary>
+    public class DerrivedCheckINNContext : CheckINNContext
+    {
+        public virtual IDbSet<User> Users { get; set; }
+    }
+
     public class UserRepository : IRepository<User>
     {
-        private readonly Func<CheckINNContext> _contextFactory;
+        private readonly Func<DerrivedCheckINNContext> _contextFactory;
 
         public UserRepository() {}
 
-        public UserRepository(Func<CheckINNContext> contextFactory)
+        public UserRepository(Func<DerrivedCheckINNContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }

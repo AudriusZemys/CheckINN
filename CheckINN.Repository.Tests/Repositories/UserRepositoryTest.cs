@@ -17,7 +17,7 @@ namespace CheckINN.Repository.Tests.Repositories
         public void NewUser_CreatesAUser()
         {
             // arrange
-            var mockContext = new Mock<CheckINNContext>();
+            var mockContext = new Mock<DerrivedCheckINNContext>();
             var repo = new UserRepository(() => {
                 var set = new FakeDbSet<User>();
                 mockContext.Setup(context => context.Users).Returns(set);
@@ -43,7 +43,7 @@ namespace CheckINN.Repository.Tests.Repositories
         {
             // arrange
             var set = new FakeDbSet<User>();
-            var mockContext = new Mock<CheckINNContext>();
+            var mockContext = new Mock<DerrivedCheckINNContext>();
             var repo = new UserRepository(() => {
                 mockContext.Setup(context => context.Users).Returns(set);
                 return mockContext.Object;
