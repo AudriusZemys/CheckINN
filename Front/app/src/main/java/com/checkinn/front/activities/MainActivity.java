@@ -22,7 +22,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int LOGGEDON = 0;
     private AppDatabase db;
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expandableListView;
@@ -49,13 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         dropTableAndInsertTestData();
 
-        //testing database access
-//        Item item = new Item();
-//        item.shopName = "shop";
-//        item.itemName = "amazing_item";
-//        item.price = 25.15;
-//        db.itemDao().insertItems(item);
-//        Item[] items = db.itemDao().loadAllItems();
 
         //login button for camera
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
