@@ -24,7 +24,6 @@ namespace CheckINN.WebApi.Tests
         [TestCase(typeof(ILog))]
         [TestCase(typeof(ImageWorker))]
         [TestCase(typeof(ProductsController))]
-        [TestCase(typeof(UserContoller))]
         [TestCase(typeof(ReceiptController))]
         public void UnityContainer_ResolvesAllClasses(Type type)
         {

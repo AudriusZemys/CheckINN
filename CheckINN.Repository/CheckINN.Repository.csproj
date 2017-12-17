@@ -66,6 +66,10 @@
     <Compile Include="Migrations\201712111642481_FullScheme2.Designer.cs">
       <DependentUpon>201712111642481_FullScheme2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712171653218_DitchUserEntity.cs" />
+    <Compile Include="Migrations\201712171653218_DitchUserEntity.Designer.cs">
+      <DependentUpon>201712171653218_DitchUserEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CheckRepository.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712111642481_FullScheme2.resx">
       <DependentUpon>201712111642481_FullScheme2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712171653218_DitchUserEntity.resx">
+      <DependentUpon>201712171653218_DitchUserEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

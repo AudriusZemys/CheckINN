@@ -14,6 +14,5 @@ namespace CheckINN.Repository.Contexts
         public virtual IDbSet<Check> Checks { get; set; }
         public virtual IDbSet<Product> Products { get; set; }
         public virtual IDbSet<Shop> Shops { get; set; }
-        public virtual IDbSet<User> Users { get; set; }
     }
 }
