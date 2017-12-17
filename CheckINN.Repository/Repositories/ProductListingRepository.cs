@@ -8,11 +8,11 @@ namespace CheckINN.Repository.Repositories
 {
     public class ProductListingRepository : IRepository<ProductListing>
     {
-        private readonly Func<ReceiptsContext> _contextFactory;
+        private readonly Func<CheckINNContext> _contextFactory;
 
         public ProductListingRepository() {}
 
-        public ProductListingRepository(Func<ReceiptsContext> contextFactory)
+        public ProductListingRepository(Func<CheckINNContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }

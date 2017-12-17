@@ -25,7 +25,8 @@ namespace CheckINN.Domain.Processing
             {
                 var rCheck = new Repository.Entities.Check
                 {
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
+                    IsValid = true
                 };
                 var rProducts = item.CheckBody.Products.Select(product => new ProductListing
                 {

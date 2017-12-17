@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.ServiceModel;
 using System.Threading;
 using System.Web.Http;
@@ -12,6 +14,7 @@ using CheckINN.Domain.Services;
 using CheckINN.Domain.Image;
 using CheckINN.Repository.Contexts;
 using CheckINN.Repository.Entities;
+using CheckINN.Repository.Migrations;
 using CheckINN.Repository.Repositories;
 using CheckINN.WebApi.Controllers;
 using CheckINN.WebApi.Formatters;
@@ -41,6 +44,7 @@ namespace CheckINN.WebApi
         private readonly CancellationTokenSource _cancellationTokenSource;
         public ApiHost()
         {
+            Database.SetInitializer<CheckINNContext>(null);
             XmlConfigurator.Configure();
             _cancellationTokenSource = new CancellationTokenSource();
             var container = BuildContainer();
@@ -79,7 +83,7 @@ namespace CheckINN.WebApi
             _container.RegisterType<IShopParser, SimpleShopParser>();
             _container.RegisterType<ILog>(
                 new InjectionFactory(container => LogManager.GetLogger("CheckINN.WebApi")));
-            _container.RegisterType<Func<ReceiptsContext>>(new InjectionFactory(DbContextFactory));
+            _container.RegisterType<Func<CheckINNContext>>(new InjectionFactory(DbContextFactory));
             _container.RegisterInstance(_cancellationTokenSource.Token);
             _container.RegisterType<ITransform, Transformator>();
             _container.RegisterType<ImageWorker>(new ContainerControlledLifetimeManager());
@@ -98,7 +102,7 @@ namespace CheckINN.WebApi
         /// <returns>Delegate to context creation</returns>
         private object DbContextFactory(IUnityContainer unityContainer)
         {
-            return new Func<ReceiptsContext>(() => new ReceiptsContext());
+            return new Func<CheckINNContext>(() => new CheckINNContext());
         }
 
         /// <summary>
@@ -139,7 +143,6 @@ namespace CheckINN.WebApi
             _server.OpenAsync().Wait(_cancellationTokenSource.Token);
         }
 
-
         /// <summary>
         /// Sends a signal to shut the service down
         /// </summary>
@@ -173,6 +176,13 @@ namespace CheckINN.WebApi
         {
             HostFactory.Run(configurator =>
             {
+                configurator.AddCommandLineSwitch("update-database", shouldUpdate =>
+                {
+                    if (shouldUpdate)
+                    {
+                        new DbMigrator(new Configuration()).Update();
+                    }
+                });
                 configurator.Service<ApiHost>(service =>
                 {
                     service.ConstructUsing(() => new ApiHost());
