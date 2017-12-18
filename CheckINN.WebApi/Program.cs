@@ -134,6 +134,7 @@ namespace CheckINN.WebApi
                 TransferMode = TransferMode.StreamedRequest
             };
             config.Formatters.Add(new SingleBitmapFormatter(ResolveLogger()));
+            config.Formatters.Add(new SingleJpegFormatter(ResolveLogger()));
             config.Routes.MapHttpRoute("Receipt API", "api/receipt/{action}", new {controller = "Receipt", action = "PostReceipt" });
             config.Routes.MapHttpRoute("Push notifications", "api/notification", new { controller = "Notification" });
             config.Routes.MapHttpRoute("Status endpoint", "api/status", new { controller = "Status" });
