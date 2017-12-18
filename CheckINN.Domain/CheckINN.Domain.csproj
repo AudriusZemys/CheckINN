@@ -62,9 +62,6 @@
     <Compile Include="Cache\IQueueCache.cs" />
     <Compile Include="Cache\BitmapQueueCache.cs" />
     <Compile Include="Entities\Check.cs" />
-    <Compile Include="Entities\CheckBody.cs" />
-    <Compile Include="Entities\CheckFooter.cs" />
-    <Compile Include="Entities\CheckHeader.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ShopIdentifier.cs" />
     <Compile Include="Image\ITransform.cs" />
