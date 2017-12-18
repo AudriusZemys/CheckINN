@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using CheckINN.Domain.Entities;
 using CheckINN.WebApi.Workers;
 using static System.Threading.Thread;
 
@@ -11,6 +13,7 @@ namespace CheckINN.WebApi.Controllers
     public class NotificationController : ApiController
     {
         private readonly ImageWorker _imageWorker;
+        private volatile IEnumerable<Product> _products;
         private volatile string _ocrText;
 
         public NotificationController(ImageWorker imageWorker)
@@ -28,6 +31,7 @@ namespace CheckINN.WebApi.Controllers
         private void OnImageProcessed(object sender, ImageProcessedEventArgs args)
         {
             _ocrText = args.OcrText;
+            _products = args.Products;
         }
 
         /// <summary>
@@ -44,7 +48,8 @@ namespace CheckINN.WebApi.Controllers
             return new
             {
                 success = true,
-                ocrText = _ocrText
+                ocrText = _ocrText,
+                products = _products
             };
         }
 
