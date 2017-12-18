@@ -16,6 +16,8 @@ import com.checkinn.front.R;
 import com.checkinn.front.adapters.ItemListExpandableAdapter;
 import com.checkinn.front.database.database.AppDatabase;
 import com.checkinn.front.database.entities.Item;
+import com.checkinn.front.rest.OnResourceLoad;
+import com.checkinn.front.rest.RestItemLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private AppDatabase db;
-    private ExpandableListAdapter listAdapter;
-    private ExpandableListView expandableListView;
+    private RestItemLoader restItemLoader;
+
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChildren;
 
@@ -35,31 +36,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //some sort of style mismatch, bbz
-        //setSupportActionBar(toolbar);
-
-//        if (savedInstanceState.getInt("LOGGED") == 0) {
-//
-//        }
-        //bad practice running on main thread but whatever
-        db = Room.databaseBuilder(getApplicationContext(),
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database").allowMainThreadQueries().build();
         startLogin();
+
+        restItemLoader = new RestItemLoader();
         populateExpandableListView();
 
-
-        dropTableAndInsertTestData();
-
-
         //button for camera
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                dispatchTakePictureIntent();
+                MainActivity.this.dispatchTakePictureIntent();
             }
         });
     }
@@ -70,75 +60,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateExpandableListView() {
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        ExpandableListView expandableListView = findViewById(R.id.expandableListView);
 
         prepareExpandableListData();
 
-        listAdapter = new ItemListExpandableAdapter(this, listDataHeader, listDataChildren);
+        ExpandableListAdapter listAdapter = new ItemListExpandableAdapter(this, listDataHeader, listDataChildren);
 
         expandableListView.setAdapter(listAdapter);
     }
 
     private void prepareExpandableListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChildren = new HashMap<String, List<String>>();
+        listDataHeader = new ArrayList<>();
+        listDataChildren = new HashMap<>();
 
-        Item[] items = db.itemDao().loadAllItems();
+        restItemLoader.Load(new OnResourceLoad<List<Item>>() {
+            @Override
+            public void OnLoad(List<Item> items) {
+                if (items.size() == 0) {
+                    listDataHeader.add("No data");
+                }
 
-        if (items.length == 0) {
-            listDataHeader.add("No data");
-        }
-
-        for (int i = 0; i < items.length; i++) {
-            listDataHeader.add(items[i].itemName);
-            List<String> data = new ArrayList<String>();
-            data.add("Shop where price is lowest: " + items[i].shopName);
-            data.add("Lowest price: " + items[i].price + " €");
-            listDataChildren.put(listDataHeader.get(i), data);
-        }
-    }
-
-    //possibly remove from final product
-    private void dropTableAndInsertTestData() {
-
-        db.itemDao().deleteAllItems();
-
-        Item item;
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Citrinos";
-        item.price = 1.39;
-        db.itemDao().insertItems(item);
-
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Malta kava JACOBS KRONUNG";
-        item.price = 4.99;
-        db.itemDao().insertItems(item);
-
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Kepintos ir sūdytos pistacijos";
-        item.price = 14.74;
-        db.itemDao().insertItems(item);
-
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Brendis J. P. CHENET RESERVE IMPERIALE";
-        item.price = 16.99;
-        db.itemDao().insertItems(item);
-
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Kepintos saulėgrąžos žM";
-        item.price = 1.48;
-        db.itemDao().insertItems(item);
-
-        item = new Item();
-        item.shopName = "Maxima";
-        item.itemName = "Tortas JUODOJI ROŽĖ";
-        item.price = 6.97;
-        db.itemDao().insertItems(item);
+                for (int i = 0; i < items.size(); i++) {
+                    listDataHeader.add(items.get(i).itemName);
+                    List<String> data = new ArrayList<String>();
+                    data.add("Shop where price is lowest: " + items.get(i).shopName);
+                    data.add("Lowest price: " + items.get(i).price + " €");
+                    listDataChildren.put(listDataHeader.get(i), data);
+                }
+            }
+        });
     }
 
     private void dispatchTakePictureIntent() {

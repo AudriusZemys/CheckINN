@@ -16,4 +16,10 @@ public class Item {
     public String shopName;
     @ColumnInfo(name = "price")
     public double price;
+
+    public Item(String itemName, String shopName, double price) {
+        this.itemName = itemName;
+        this.shopName = shopName;
+        this.price = price;
+    }
 }
