@@ -6,7 +6,7 @@ using static NUnit.Framework.CollectionAssert;
 
 namespace CheckInn.Domain.Tests.Parser
 {
-    [TestFixture]
+    /*[TestFixture]
     public class ParserTest
     {
         private List<Tuple<string, double>> _expectedResult;
@@ -37,5 +37,5 @@ namespace CheckInn.Domain.Tests.Parser
             // assert
             AreEquivalent(_expectedResult, parser.Products);
         }
-    }
+    }*/
 }
