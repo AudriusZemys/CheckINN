@@ -31,10 +31,9 @@ namespace CheckInn.Domain.Tests.Cache
 
             // assert
             var result = cache.First();
-            AreEquivalent(data.CheckBody.Products, result.CheckBody.Products);
-            AreEqualIgnoringCase(data.CheckFooter.CashRegister, result.CheckFooter.CashRegister);
-            AreEqualIgnoringCase(data.CheckHeader.ShopIdentifierString, result.CheckHeader.ShopIdentifierString);
-            Assert.AreEqual(data.CheckHeader.ShopIdentifier, result.CheckHeader.ShopIdentifier);
+            AreEquivalent(data.Products, result.Products);
+            AreEqualIgnoringCase(data.ShopAddress, result.ShopAddress);
+            Assert.AreEqual(data.Shop, result.Shop);
         }
     }
 }

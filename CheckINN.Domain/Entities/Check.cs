@@ -1,16 +1,18 @@
-﻿namespace CheckINN.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace CheckINN.Domain.Entities
 {
     public class Check
     {
-        public Check(CheckHeader checkHeader, CheckBody checkBody, CheckFooter checkFooter)
+        public Check(ShopIdentifier shop, string shopAddress, IEnumerable<Product> products)
         {
-            CheckHeader = checkHeader;
-            CheckBody = checkBody;
-            CheckFooter = checkFooter;
+            Shop = shop;
+            ShopAddress = shopAddress;
+            Products = products;
         }
 
-        public CheckHeader CheckHeader { get; }
-        public CheckBody CheckBody { get; }
-        public CheckFooter CheckFooter { get; }
+        public ShopIdentifier Shop { get; }
+        public string ShopAddress { get; }
+        public IEnumerable<Product> Products { get; }
     }
 }

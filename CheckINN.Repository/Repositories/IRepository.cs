@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using CheckINN.Repository.Entities;
 
 namespace CheckINN.Repository.Repositories
 {

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using CheckINN.Domain.Cache;
-using NUnit.Framework.Internal;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
 using static NUnit.Framework.Assert;
 
 namespace CheckInn.Domain.Tests.Cache

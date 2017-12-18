@@ -1,14 +1,8 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Reflection;
 using CheckINN.Domain.Cache;
-using CheckINN.Domain.Image;
-using CheckINN.Domain.Parser;
-using CheckINN.Domain.Processing;
-using CheckINN.Domain.Services;
 using CheckINN.WebApi.Controllers;
 using log4net;
-using Moq;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -31,16 +25,7 @@ namespace CheckINN.WebApi.Tests.Controllers
                 .GetManifestResourceStream("CheckINN.WebApi.Tests.test_sample.bmp");
             NotNull(sample);
             var expect = new Bitmap(sample);
-
-            var textRecognition = new Mock<ITextRecognition>();
-            var processor = new Mock<ICheckProcessor>();
-            var parser = new Mock<IShopParser>();
-            var transform = new Mock<ITransform>();
             var controller = new ReceiptController(
-                new Lazy<ITextRecognition>(() => textRecognition.Object),
-                new Lazy<ICheckProcessor>(() => processor.Object), 
-                new Lazy<IShopParser>(() => parser.Object), 
-                new Lazy<ITransform>(() => transform.Object), 
                 LogManager.GetLogger(GetType().FullName),
                 queueCache);
 

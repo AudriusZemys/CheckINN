@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using CheckINN.Domain.Cache;
 using CheckINN.Domain.Entities;
@@ -78,11 +79,40 @@ namespace CheckINN.WebApi.Workers
                 var textRecognition = _container.Resolve<ITextRecognition>();
                 textRecognition.Process(image);
                 var ocrText = textRecognition.GetText();
-                var products = _parser.ParseProductList(ocrText);
-                var check = new Check(
-                    checkBody: new CheckBody(products),
-                    checkFooter: new CheckFooter("321654"),
-                    checkHeader: new CheckHeader(ShopIdentifier.Maxima));
+                var ocrLines = ocrText.Split('\n');
+
+                var products = _parser.ParseProductList(ocrText).ToList();
+                var parser = new Parser(ocrLines);
+                try
+                {
+                    parser.Parse();
+                }
+                catch (Exception e)
+                {
+                    _log.Error(e);
+                    return;
+                }
+
+                ShopIdentifier shop;
+                switch(parser.ShopName)
+                {
+                    case "MAXIMA":
+                        shop = ShopIdentifier.Maxima;
+                        break;
+                    case "RIMI":
+                        shop = ShopIdentifier.Rimi;
+                        break;
+                    case "IKI":
+                        shop = ShopIdentifier.Iki;
+                        break;
+                    case "LIDL":
+                        shop = ShopIdentifier.Lidl;
+                        break;
+                    default:
+                        shop = ShopIdentifier.Unknown;
+                        break;
+                }
+                var check = new Check(shop, parser.ShopAddress, products);
 
                 textRecognition.Dispose();
                 if (!_processor.TryProcess(check))
@@ -96,7 +126,7 @@ namespace CheckINN.WebApi.Workers
                 }
                 else
                 {
-                    ImageProcessed(this, new ImageProcessedEventArgs(ocrText));
+                    ImageProcessed(this, new ImageProcessedEventArgs(ocrText, products));
                 }
             }
         }
